@@ -114,6 +114,8 @@
 		<module>org.openjdk.jmc.ui.common</module>
 		<module>org.openjdk.jmc.updatesite.ide</module>
 		<module>org.openjdk.jmc.updatesite.rcp</module>
+		<module>org.openjdk.jmc.jolokia</module>
+		<module>org.openjdk.jmc.kubernetes</module>
 		<module>l10n</module>
 		<module>tests</module>
 		<module>coverage</module>
