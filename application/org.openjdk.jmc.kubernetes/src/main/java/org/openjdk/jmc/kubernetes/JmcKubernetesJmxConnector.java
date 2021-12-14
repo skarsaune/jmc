@@ -42,6 +42,8 @@ import org.jolokia.client.J4pClient;
 import org.jolokia.client.jmxadapter.RemoteJmxAdapter;
 import org.jolokia.kubernetes.client.KubernetesJmxConnector;
 
+import io.fabric8.kubernetes.api.model.Pod;
+
 public class JmcKubernetesJmxConnector extends KubernetesJmxConnector {
 
 	public JmcKubernetesJmxConnector(JMXServiceURL serviceURL, Map<String, ?> environment) {
@@ -51,5 +53,10 @@ public class JmcKubernetesJmxConnector extends KubernetesJmxConnector {
 	@Override
 	protected RemoteJmxAdapter createAdapter(J4pClient client) throws IOException {
 		return new JmcKubernetesJmxConnection(client);
+	}
+	
+	static StringBuilder apiLinkUpToPod(Pod pod) {
+		return new StringBuilder("/api/").append(pod.getApiVersion()).append("/namespaces/")
+				.append(pod.getMetadata().getNamespace()).append("/pods/");
 	}
 }

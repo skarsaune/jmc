@@ -10,7 +10,7 @@ Require-Bundle: org.openjdk.jmc.jolokia;bundle-version="8.2.0",
  org.eclipse.ui,
  org.openjdk.jmc.ui,
  org.eclipse.swt
-Bundle-ClassPath: target/dependency/jolokia-kubernetes-1.7.0.jar,
+Bundle-ClassPath: target/dependency/jolokia-kubernetes-1.7.2-SNAPSHOT.jar,
  target/dependency/json-simple-1.1.1.jar,
  target/dependency/snakeyaml-1.19.jar,
  target/dependency/gson-2.8.0.jar,

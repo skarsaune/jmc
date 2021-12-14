@@ -185,7 +185,7 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 			}
 			authorize(headers, client, parameters.username(), parameters.password(), metadata.getNamespace(), env);
 		}
-		final StringBuilder url = new StringBuilder(metadata.getSelfLink());
+
 		// JMX url must be reverse constructed, so that we can connect from the
 		// resulting node in the JVM browser
 		final StringBuilder jmxUrl = new StringBuilder("service:jmx:kubernetes:///").append(metadata.getNamespace()) //$NON-NLS-1$
@@ -198,8 +198,6 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 				throw new IllegalArgumentException(Messages.KubernetesDiscoveryListener_JolokiaProtocol + protocol
 						+ Messages.KubernetesDiscoveryListener_HttpOrHttps);
 			}
-			// a bit clumsy, need to inject protocol _before_ podname in selflink
-			url.insert(url.lastIndexOf(podName), protocol + ":"); //$NON-NLS-1$
 			jmxUrl.append(protocol).append(':');
 		}
 
@@ -207,25 +205,22 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 
 		final String port = getValueOrAttribute(parameters.jolokiaPort(), metadata);
 		if (port != null) {
-			url.append(":").append(port); //$NON-NLS-1$
 			jmxUrl.append(':').append(port);
 		}
 
-		url.append("/proxy"); //$NON-NLS-1$
 
 		final String path = getValueOrAttribute(parameters.jolokiaPath(), metadata);
 
 		if (!path.startsWith("/")) { //$NON-NLS-1$
-			url.append('/');
 			jmxUrl.append('/');
 		}
-		url.append(path);
 		jmxUrl.append(path);
 
 		if (context != null) {
 			env.put(KubernetesJmxConnector.KUBERNETES_CLIENT_CONTEXT, context);
 		}
-		J4pClient jvmClient = KubernetesJmxConnector.probeProxyPath(env, client, url, headers);
+		
+		J4pClient jvmClient = KubernetesJmxConnector.probeProxyPath(env, client, proxyUrl(pod, protocol, port, path), headers);
 		if (jvmClient != null) {
 			JmcKubernetesJmxConnection connection;
 			try {
@@ -240,6 +235,17 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 
 			}
 		}
+	}
+
+	private StringBuilder proxyUrl(final Pod pod, String protocol, String port, final String path) {
+		
+		if(protocol != null) {
+			protocol = protocol + ":";
+		}
+		if (port != null) {
+			port = ":" + port;
+		}
+		return KubernetesJmxConnector.buildProxyPath(pod, protocol, port, path);
 	}
 
 	private String getValueOrAttribute(String configValue, ObjectMeta metadata) {
