@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2024, Oracle and/or its affiliates. All rights reserved.
- * Copyright (c) 2024, Kantega AS. All rights reserved.
+ * Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, Kantega AS. All rights reserved. 
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.management.Attribute;
 import javax.management.AttributeNotFoundException;
@@ -57,12 +58,19 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXServiceURL;
 
 import org.awaitility.Awaitility;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openjdk.jmc.common.IDescribable;
+import org.openjdk.jmc.jolokia.preferences.PreferenceConstants;
+import org.openjdk.jmc.rjmx.common.IConnectionDescriptor;
+import org.openjdk.jmc.rjmx.common.IServerDescriptor;
+import org.openjdk.jmc.rjmx.descriptorprovider.IDescriptorListener;
 
 /**
- * Tests that JMX connections done with JmcJolokiaJmxConnectionProvider are functional
+ * I test that JMX connections done with JmcJolokiaJmxConnectionProvider are functional
  */
 @SuppressWarnings("restriction")
 public class JolokiaTest {
@@ -73,6 +81,8 @@ public class JolokiaTest {
 			Arrays.asList("BootClassPath", "UsageThreshold", "UsageThresholdExceeded", "UsageThresholdCount",
 					"CollectionUsageThreshold", "CollectionUsageThresholdExceeded", "CollectionUsageThresholdCount"));
 
+	private static JolokiaDiscoveryListener discoveryListener;
+
 	private static MBeanServerConnection jolokiaConnection;
 
 	@BeforeClass
@@ -80,6 +90,7 @@ public class JolokiaTest {
 		// wait for Jolokia to be ready before commencing tests
 		Awaitility.await().atMost(Duration.ofSeconds(15))//Note: hard code property to avoid module dependency on agent
 				.until(() -> (jolokiaUrl = System.getProperty("jolokia.agent")) != null);
+		discoveryListener = new JolokiaDiscoveryListener();
 		jolokiaConnection = getJolokiaMBeanConnector();
 
 	}
@@ -122,6 +133,35 @@ public class JolokiaTest {
 		connector.connect();
 		MBeanServerConnection connection = connector.getMBeanServerConnection();
 		return connection;
+	}
+
+	@Test
+	public void testDiscover() {
+
+		final AtomicInteger foundVms = new AtomicInteger(0);
+
+		//Set config so that scanning takes place
+		InstanceScope.INSTANCE.getNode(JmcJolokiaPlugin.PLUGIN_ID).put(PreferenceConstants.P_SCAN, "true");
+
+		discoveryListener.addDescriptorListener(new IDescriptorListener() {
+			public void onDescriptorDetected(
+				IServerDescriptor serverDescriptor, String path, JMXServiceURL url,
+				IConnectionDescriptor connectionDescriptor, IDescribable provider) {
+				foundVms.getAndIncrement();
+			}
+
+			public void onDescriptorRemoved(String descriptorId) {
+				foundVms.getAndDecrement();
+			}
+
+		});
+		// Test that at least one VM (the one running the test was discovered)
+		Awaitility.await().atMost(Duration.ofSeconds(5)).until(() -> foundVms.get() > 0);
+	}
+
+	@AfterClass
+	public static void stopServer() throws Exception {
+		discoveryListener.shutdown();
 	}
 
 }
