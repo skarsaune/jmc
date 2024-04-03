@@ -53,6 +53,7 @@
             <unit id="org.apache.aries.spifly.dynamic.bundle" version="1.3.6"/>
             <unit id="org.jolokia.client-jmx-adapter.standalone" version="2.0.2"/>
             <unit id="org.jolokia.agent.osgi" version="2.0.2"/>
+            <unit id="org.osgi.service.servlet" version="2.0.0.202212101352"/>
             <unit id="com.github.tomakehurst.wiremock-standalone" version="2.27.2"/>
             <unit id="fireplace-swing" version="0.0.1.rc3"/>
             <unit id="fireplace-swt-awt-bridge" version="0.0.1.rc3"/>

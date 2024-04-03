@@ -147,6 +147,12 @@
 								</artifact>
 								<artifact>
 									<id>org.jolokia:jolokia-agent-osgi:${jolokia.version}</id>
+									<transitive>false</transitive>
+									<override>true</override>
+								</artifact>
+								<artifact>
+									<id>org.osgi:org.osgi.service.servlet:2.0.0</id>
+									<override>true</override>
 								</artifact>
 								<artifact>
 									<id>com.github.tomakehurst:wiremock-standalone:${wiremock.version}</id>
