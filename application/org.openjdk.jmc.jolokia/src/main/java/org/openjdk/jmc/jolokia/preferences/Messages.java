@@ -1,24 +1,3 @@
-package org.openjdk.jmc.jolokia;
-
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
-public class Messages {
-	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
-
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
-
-	private Messages() {
-	}
-
-	public static String getString(String key) {
-		try {
-			return RESOURCE_BUNDLE.getString(key);
-		} catch (MissingResourceException e) {
-			return '!' + key + '!';
-		}
-	}
-=======
 /*
  * Copyright (c) 2024, Oracle and/or its affiliates. All rights reserved.
  * Copyright (c) 2024, Kantega AS. All rights reserved.
@@ -52,13 +31,14 @@ public class Messages {
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.openjdk.jmc.jolokia;
+package org.openjdk.jmc.jolokia.preferences;
 
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.openjdk.jmc.jolokia.messages"; //$NON-NLS-1$
-	public static String JolokiaDiscoveryListener_Description;
+	private static final String BUNDLE_NAME = "org.openjdk.jmc.jolokia.preferences.messages"; //$NON-NLS-1$
+	public static String JolokiaPreferencePage_Description;
+	public static String JolokiaPreferencePage_Label;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

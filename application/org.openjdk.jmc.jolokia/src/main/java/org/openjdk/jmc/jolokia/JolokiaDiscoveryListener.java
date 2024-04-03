@@ -1,24 +1,3 @@
-package org.openjdk.jmc.jolokia;
-
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
-public class Messages {
-	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
-
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
-
-	private Messages() {
-	}
-
-	public static String getString(String key) {
-		try {
-			return RESOURCE_BUNDLE.getString(key);
-		} catch (MissingResourceException e) {
-			return '!' + key + '!';
-		}
-	}
-=======
 /*
  * Copyright (c) 2024, Oracle and/or its affiliates. All rights reserved.
  * Copyright (c) 2024, Kantega AS. All rights reserved.
@@ -54,16 +33,66 @@ public class Messages {
  */
 package org.openjdk.jmc.jolokia;
 
-import org.eclipse.osgi.util.NLS;
+import java.io.IOException;
 
-public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.openjdk.jmc.jolokia.messages"; //$NON-NLS-1$
-	public static String JolokiaDiscoveryListener_Description;
-	static {
-		// initialize resource bundle
-		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jolokia.client.jmxadapter.RemoteJmxAdapter;
+import org.jolokia.service.discovery.JolokiaDiscovery;
+import org.openjdk.jmc.common.jvm.JVMDescriptor;
+import org.openjdk.jmc.jolokia.preferences.PreferenceConstants;
+
+/**
+ * Add found Jolokia instances to the JVM browser using the Jolokia discovery mechanism.
+ * https://jolokia.org/reference/html/protocol.html#discovery
+ */
+public class JolokiaDiscoveryListener extends AbstractCachedDescriptorProvider implements PreferenceConstants {
+
+	@Override
+	protected Map<String, ServerConnectionDescriptor> discoverJvms() {
+		Map<String, ServerConnectionDescriptor> found = new HashMap<>();
+		if (!JmcJolokiaPlugin.getDefault().getPreferenceStore().getBoolean(P_SCAN)) {
+			return found;
+		}
+		try {
+			for (Object object : new JolokiaDiscovery().lookupAgents()) {
+				try {
+
+					@SuppressWarnings("unchecked")
+					Map<String, ?> response = (Map<String, ?>) object;
+					JVMDescriptor jvmInfo;
+					try {// if it is connectable, see if we can get info from connection
+						jvmInfo = JolokiaAgentDescriptor
+								.attemptToGetJvmInfo(new RemoteJmxAdapter(String.valueOf(response.get("url")))); //$NON-NLS-1$
+					} catch (Exception ignore) {
+						jvmInfo = JolokiaAgentDescriptor.NULL_DESCRIPTOR;
+					}
+					JolokiaAgentDescriptor agentDescriptor = new JolokiaAgentDescriptor(response, jvmInfo);
+					found.put(agentDescriptor.getGUID(), agentDescriptor);
+
+				} catch (URISyntaxException ignore) {
+				}
+			}
+		} catch (IOException ignore) {
+		}
+		return found;
 	}
 
-	private Messages() {
+	@Override
+	public String getDescription() {
+		return Messages.JolokiaDiscoveryListener_Description;
 	}
+
+	@Override
+	public String getName() {
+		return "jolokia"; //$NON-NLS-1$
+	}
+
+	@Override
+	protected boolean isEnabled() {
+		return true;
+	}
+
 }

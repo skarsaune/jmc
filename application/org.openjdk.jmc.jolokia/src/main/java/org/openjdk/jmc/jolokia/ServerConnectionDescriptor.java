@@ -1,24 +1,3 @@
-package org.openjdk.jmc.jolokia;
-
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
-public class Messages {
-	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
-
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
-
-	private Messages() {
-	}
-
-	public static String getString(String key) {
-		try {
-			return RESOURCE_BUNDLE.getString(key);
-		} catch (MissingResourceException e) {
-			return '!' + key + '!';
-		}
-	}
-=======
 /*
  * Copyright (c) 2024, Oracle and/or its affiliates. All rights reserved.
  * Copyright (c) 2024, Kantega AS. All rights reserved.
@@ -54,16 +33,16 @@ public class Messages {
  */
 package org.openjdk.jmc.jolokia;
 
-import org.eclipse.osgi.util.NLS;
+import javax.management.remote.JMXServiceURL;
 
-public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.openjdk.jmc.jolokia.messages"; //$NON-NLS-1$
-	public static String JolokiaDiscoveryListener_Description;
-	static {
-		// initialize resource bundle
-		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
-	}
+import org.openjdk.jmc.rjmx.common.IConnectionDescriptor;
+import org.openjdk.jmc.rjmx.common.IServerDescriptor;
 
-	private Messages() {
-	}
+/**
+ * Describes the JVM and how to connect to it.
+ */
+public interface ServerConnectionDescriptor extends IServerDescriptor, IConnectionDescriptor {
+	String getPath();
+
+	JMXServiceURL serviceUrl();
 }
