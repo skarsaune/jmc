@@ -74,7 +74,11 @@
 					<!-- Start jolokia on a random free port to avoid requiring specific ports to run test -->
 					<!-- Agent version may differ from client version, in fact it may be a good test -->
 					<argLine>
+<<<<<<< HEAD
 						-javaagent:${settings.localRepository}/org/jolokia/jolokia-jvm/${jolokia.agent.version}/jolokia-jvm-${jolokia.agent.version}.jar=port=0,discover=true</argLine>
+=======
+						-javaagent:${settings.localRepository}/org/jolokia/jolokia-agent-jvm/${jolokia.version}/jolokia-agent-jvm-${jolokia.version}-javaagent.jar=port=0,discover=true</argLine>
+>>>>>>> 0e5dec8c (Upgrade jolokia agent used in test to 2.0.2)
 				</configuration>
 			</plugin>
 
