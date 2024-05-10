@@ -34,7 +34,6 @@
 package org.openjdk.jmc.jolokia;
 
 import java.io.IOException;
-
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +56,9 @@ public class JolokiaDiscoveryListener extends AbstractCachedDescriptorProvider i
 			return found;
 		}
 		try {
-			for (Object object : new JolokiaDiscovery().lookupAgents()) {
+			JolokiaDiscovery jolokiaDiscovery = new JolokiaDiscovery();
+			jolokiaDiscovery.init(JmcJolokiaPlugin.getDefault().getJmcJolokiaContext());
+			for (Object object : jolokiaDiscovery.lookupAgents()) {
 				try {
 
 					@SuppressWarnings("unchecked")
