@@ -38,7 +38,6 @@ import java.util.Collections;
 import java.util.TreeSet;
 
 import org.jolokia.server.core.config.ConfigKey;
-import org.jolokia.server.core.config.Configuration;
 import org.jolokia.server.core.config.StaticConfiguration;
 import org.jolokia.server.core.restrictor.AllowAllRestrictor;
 import org.jolokia.server.core.service.JolokiaServiceManagerFactory;
