@@ -120,8 +120,8 @@ public class JolokiaTest {
 	public void testWriteAttribute()
 			throws InstanceNotFoundException, AttributeNotFoundException, InvalidAttributeValueException,
 			MalformedObjectNameException, MBeanException, ReflectionException, MalformedURLException, IOException {
-		ObjectName objectName = new ObjectName("jolokia:type=Config");
-		String attribute = "Debug";
+		ObjectName objectName = new ObjectName("java.lang:type=Memory");
+		String attribute = "Verbose";
 		jolokiaConnection.setAttribute(objectName, new Attribute(attribute, true));
 		Assert.assertEquals(true, jolokiaConnection.getAttribute(objectName, attribute));
 

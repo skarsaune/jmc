@@ -148,7 +148,9 @@
 								<artifact>
 									<id>org.jolokia:jolokia-service-discovery:${jolokia.version}</id>
 									<override>true</override>
-									<Export-Package>org.jolokia.service.discovery</Export-Package>
+									<instructions>
+										<Export-Package>org.jolokia.service.discovery</Export-Package>
+									</instructions>
 								</artifact>
 								<artifact>
 									<id>org.jolokia:jolokia-server-core:${jolokia.version}</id>
