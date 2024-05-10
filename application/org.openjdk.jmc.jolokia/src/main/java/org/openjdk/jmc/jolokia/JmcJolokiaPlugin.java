@@ -66,7 +66,8 @@ public class JmcJolokiaPlugin extends MCAbstractUIPlugin {
 	 *         server side aspects here.
 	 */
 	public JolokiaContext getJmcJolokiaContext() {
-		StaticConfiguration configuration = new StaticConfiguration(Collections.singletonMap(ConfigKey.AGENT_ID, "jmc"));
+		StaticConfiguration configuration = new StaticConfiguration(
+				Collections.singletonMap(ConfigKey.AGENT_ID, "jmc"));
 		JolokiaServiceManager serviceManager = JolokiaServiceManagerFactory.createJolokiaServiceManager(configuration,
 				new JulLogHandler(PLUGIN_ID), new AllowAllRestrictor(),
 				() -> new TreeSet<ServerDetector>(Arrays.asList(ServerDetector.FALLBACK)));
