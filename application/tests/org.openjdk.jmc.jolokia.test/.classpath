@@ -16,5 +16,6 @@
 			<accessrule kind="accessible" pattern="org/json/simple/*"/>
 		</accessrules>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/marska/.m2/repository/org/awaitility/awaitility/4.0.0/awaitility-4.0.0.jar"/>
 	<classpathentry kind="output" path="target/test-classes"/>
 </classpath>

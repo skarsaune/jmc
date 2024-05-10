@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.openjdk.jmc.common,
  org.openjdk.jmc.rjmx,
  org.openjdk.jmc.ui,
- org.jolokia.agent.osgi;bundle-version="2.0.2"
+ org.jolokia.service.discovery;bundle-version="2.0.2",
+ org.jolokia.server.core;bundle-version="2.0.2"
 Export-Package:  org.openjdk.jmc.jolokia,
  org.openjdk.jmc.jolokia.preferences
 Bundle-Activator: org.openjdk.jmc.jolokia.JmcJolokiaPlugin

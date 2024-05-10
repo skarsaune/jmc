@@ -146,13 +146,15 @@
 									<transitive>false</transitive>
 								</artifact>
 								<artifact>
-									<id>org.jolokia:jolokia-agent-osgi:${jolokia.version}</id>
-									<transitive>false</transitive>
+									<id>org.jolokia:jolokia-service-discovery:${jolokia.version}</id>
 									<override>true</override>
+									<Export-Package>org.jolokia.service.discovery</Export-Package>
+								</artifact>
+								<artifact>
+									<id>org.jolokia:jolokia-server-core:${jolokia.version}</id>
 								</artifact>
 								<artifact>
 									<id>org.osgi:org.osgi.service.servlet:2.0.0</id>
-									<override>true</override>
 								</artifact>
 								<artifact>
 									<id>com.github.tomakehurst:wiremock-standalone:${wiremock.version}</id>
