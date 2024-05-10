@@ -61,8 +61,8 @@ public class JmcJolokiaPlugin extends MCAbstractUIPlugin {
 	}
 
 	/**
-	 * @return a very basic Jolokia context to satisfy discovery. We are not
-	 *         interested in the server side aspects here.
+	 * @return a very basic Jolokia context to satisfy discovery. We are not interested in the
+	 *         server side aspects here.
 	 */
 	public JolokiaContext getJmcJolokiaContext() {
 		StaticConfiguration configuration = new StaticConfiguration(ConfigKey.AGENT_ID, "jmc");
