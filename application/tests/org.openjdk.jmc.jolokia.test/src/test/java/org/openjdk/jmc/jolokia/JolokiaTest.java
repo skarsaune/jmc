@@ -87,6 +87,8 @@ public class JolokiaTest {
 
 	@BeforeClass
 	public static void startServer() throws Exception {
+		//Set config so that scanning takes place
+		InstanceScope.INSTANCE.getNode(JmcJolokiaPlugin.PLUGIN_ID).put(PreferenceConstants.P_SCAN, "true");
 		// wait for Jolokia to be ready before commencing tests
 		Awaitility.await().atMost(Duration.ofSeconds(15))//Note: hard code property to avoid module dependency on agent
 				.until(() -> (jolokiaUrl = System.getProperty("jolokia.agent")) != null);
@@ -139,9 +141,6 @@ public class JolokiaTest {
 	public void testDiscover() {
 
 		final AtomicInteger foundVms = new AtomicInteger(0);
-
-		//Set config so that scanning takes place
-		InstanceScope.INSTANCE.getNode(JmcJolokiaPlugin.PLUGIN_ID).put(PreferenceConstants.P_SCAN, "true");
 
 		discoveryListener.addDescriptorListener(new IDescriptorListener() {
 			public void onDescriptorDetected(
