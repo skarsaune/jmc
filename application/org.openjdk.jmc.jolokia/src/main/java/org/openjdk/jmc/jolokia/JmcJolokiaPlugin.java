@@ -37,10 +37,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.TreeSet;
 
+import org.jolokia.server.core.config.ConfigKey;
+import org.jolokia.server.core.config.Configuration;
 import org.jolokia.server.core.config.StaticConfiguration;
 import org.jolokia.server.core.restrictor.AllowAllRestrictor;
 import org.jolokia.server.core.service.JolokiaServiceManagerFactory;
 import org.jolokia.server.core.service.api.JolokiaContext;
+import org.jolokia.server.core.service.api.JolokiaServiceManager;
 import org.jolokia.server.core.service.impl.JulLogHandler;
 import org.jolokia.server.core.detector.ServerDetector;
 import org.openjdk.jmc.ui.MCAbstractUIPlugin;
@@ -64,8 +67,10 @@ public class JmcJolokiaPlugin extends MCAbstractUIPlugin {
 	 *         server side aspects here.
 	 */
 	public JolokiaContext getJmcJolokiaContext() {
-		return JolokiaServiceManagerFactory.createJolokiaServiceManager(new StaticConfiguration(Collections.emptyMap()),
+		StaticConfiguration configuration = new StaticConfiguration(Collections.singletonMap(ConfigKey.AGENT_ID, "jmc"));
+		JolokiaServiceManager serviceManager = JolokiaServiceManagerFactory.createJolokiaServiceManager(configuration,
 				new JulLogHandler(PLUGIN_ID), new AllowAllRestrictor(),
-				() -> new TreeSet<ServerDetector>(Arrays.asList(ServerDetector.FALLBACK))).start();
+				() -> new TreeSet<ServerDetector>(Arrays.asList(ServerDetector.FALLBACK)));
+		return serviceManager.start();
 	}
 }
