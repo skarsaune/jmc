@@ -34,17 +34,16 @@
 package org.openjdk.jmc.jolokia;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.TreeSet;
 
 import org.jolokia.server.core.config.ConfigKey;
 import org.jolokia.server.core.config.StaticConfiguration;
+import org.jolokia.server.core.detector.ServerDetector;
 import org.jolokia.server.core.restrictor.AllowAllRestrictor;
 import org.jolokia.server.core.service.JolokiaServiceManagerFactory;
 import org.jolokia.server.core.service.api.JolokiaContext;
 import org.jolokia.server.core.service.api.JolokiaServiceManager;
 import org.jolokia.server.core.service.impl.JulLogHandler;
-import org.jolokia.server.core.detector.ServerDetector;
 import org.openjdk.jmc.ui.MCAbstractUIPlugin;
 
 public class JmcJolokiaPlugin extends MCAbstractUIPlugin {
