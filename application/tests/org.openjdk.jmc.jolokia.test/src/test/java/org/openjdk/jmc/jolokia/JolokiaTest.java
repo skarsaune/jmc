@@ -67,7 +67,7 @@ import org.jolokia.server.core.service.JolokiaServiceManagerFactory;
 import org.jolokia.server.core.service.api.JolokiaContext;
 import org.jolokia.server.core.service.api.JolokiaServiceManager;
 import org.jolokia.server.core.service.impl.StdoutLogHandler;
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -89,7 +89,7 @@ public class JolokiaTest implements JolokiaDiscoverySettings, PreferenceConstant
 			Arrays.asList("BootClassPath", "UsageThreshold", "UsageThresholdExceeded", "UsageThresholdCount",
 					"CollectionUsageThreshold", "CollectionUsageThresholdExceeded", "CollectionUsageThresholdCount"));
 
-	private static JolokiaDiscoveryListener discoveryListener;
+	private JolokiaDiscoveryListener discoveryListener;
 
 	private static MBeanServerConnection jolokiaConnection;
 
@@ -165,9 +165,11 @@ public class JolokiaTest implements JolokiaDiscoverySettings, PreferenceConstant
 		Awaitility.await().atMost(Duration.ofSeconds(5)).until(() -> foundVms.get() > 0);
 	}
 
-	@AfterClass
-	public static void stopServer() throws Exception {
-		discoveryListener.shutdown();
+	@After
+	public void stopListener() throws Exception {
+		if (discoveryListener != null) {
+			discoveryListener.shutdown();
+		}
 	}
 
 	@Override
