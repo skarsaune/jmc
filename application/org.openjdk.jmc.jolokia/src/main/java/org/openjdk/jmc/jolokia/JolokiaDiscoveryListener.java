@@ -51,7 +51,7 @@ public class JolokiaDiscoveryListener extends AbstractCachedDescriptorProvider i
 
 	JolokiaDiscoverySettings settings;
 
-	JolokiaDiscoveryListener(JolokiaDiscoverySettings settings) {
+	public JolokiaDiscoveryListener(JolokiaDiscoverySettings settings) {
 		this.settings = settings;
 	}
 
