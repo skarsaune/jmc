@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.management.Attribute;
@@ -59,6 +60,15 @@ import javax.management.remote.JMXServiceURL;
 
 import org.awaitility.Awaitility;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.jolokia.server.core.config.ConfigKey;
+import org.jolokia.server.core.config.StaticConfiguration;
+import org.jolokia.server.core.detector.ServerDetector;
+import org.jolokia.server.core.restrictor.AllowAllRestrictor;
+import org.jolokia.server.core.service.JolokiaServiceManagerFactory;
+import org.jolokia.server.core.service.api.JolokiaContext;
+import org.jolokia.server.core.service.api.JolokiaServiceManager;
+import org.jolokia.server.core.service.impl.JulLogHandler;
+import org.jolokia.server.core.service.impl.StdoutLogHandler;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -73,7 +83,7 @@ import org.openjdk.jmc.rjmx.descriptorprovider.IDescriptorListener;
  * I test that JMX connections done with JmcJolokiaJmxConnectionProvider are functional
  */
 @SuppressWarnings("restriction")
-public class JolokiaTest {
+public class JolokiaTest implements JolokiaDiscoverySettings, PreferenceConstants {
 
 	static String jolokiaUrl;
 
@@ -87,12 +97,9 @@ public class JolokiaTest {
 
 	@BeforeClass
 	public static void startServer() throws Exception {
-		//Set config so that scanning takes place
-		InstanceScope.INSTANCE.getNode(JmcJolokiaPlugin.PLUGIN_ID).put(PreferenceConstants.P_SCAN, "true");
 		// wait for Jolokia to be ready before commencing tests
 		Awaitility.await().atMost(Duration.ofSeconds(15))//Note: hard code property to avoid module dependency on agent
 				.until(() -> (jolokiaUrl = System.getProperty("jolokia.agent")) != null);
-		discoveryListener = new JolokiaDiscoveryListener();
 		jolokiaConnection = getJolokiaMBeanConnector();
 
 	}
@@ -140,6 +147,8 @@ public class JolokiaTest {
 	@Test
 	public void testDiscover() {
 
+		discoveryListener = new JolokiaDiscoveryListener(this);
+
 		final AtomicInteger foundVms = new AtomicInteger(0);
 
 		discoveryListener.addDescriptorListener(new IDescriptorListener() {
@@ -161,6 +170,20 @@ public class JolokiaTest {
 	@AfterClass
 	public static void stopServer() throws Exception {
 		discoveryListener.shutdown();
+	}
+
+	@Override
+	public boolean shouldRunDiscovery() {
+		return true;
+	}
+
+	@Override
+	public JolokiaContext getJolokiaContext() {
+		StaticConfiguration configuration = new StaticConfiguration(ConfigKey.AGENT_ID, "jolokiatest");
+		JolokiaServiceManager serviceManager = JolokiaServiceManagerFactory.createJolokiaServiceManager(configuration,
+				new StdoutLogHandler(true), new AllowAllRestrictor(),
+				() -> new TreeSet<ServerDetector>(Arrays.asList(ServerDetector.FALLBACK)));
+		return serviceManager.start();
 	}
 
 }

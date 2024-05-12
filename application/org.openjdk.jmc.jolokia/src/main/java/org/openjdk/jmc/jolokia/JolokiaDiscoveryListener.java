@@ -49,15 +49,25 @@ import org.openjdk.jmc.jolokia.preferences.PreferenceConstants;
  */
 public class JolokiaDiscoveryListener extends AbstractCachedDescriptorProvider implements PreferenceConstants {
 
+	JolokiaDiscoverySettings settings;
+
+	JolokiaDiscoveryListener(JolokiaDiscoverySettings settings) {
+		this.settings = settings;
+	}
+
+	public JolokiaDiscoveryListener() {
+		this(JmcJolokiaPlugin.getDefault());
+	}
+
 	@Override
 	protected Map<String, ServerConnectionDescriptor> discoverJvms() {
 		Map<String, ServerConnectionDescriptor> found = new HashMap<>();
-		if (!JmcJolokiaPlugin.getDefault().getPreferenceStore().getBoolean(P_SCAN)) {
+		if (!this.settings.shouldRunDiscovery()) {
 			return found;
 		}
 		try {
 			JolokiaDiscovery jolokiaDiscovery = new JolokiaDiscovery();
-			jolokiaDiscovery.init(JmcJolokiaPlugin.getDefault().getJmcJolokiaContext());
+			jolokiaDiscovery.init(this.settings.getJolokiaContext());
 			for (Object object : jolokiaDiscovery.lookupAgents()) {
 				try {
 

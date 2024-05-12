@@ -44,9 +44,10 @@ import org.jolokia.server.core.service.JolokiaServiceManagerFactory;
 import org.jolokia.server.core.service.api.JolokiaContext;
 import org.jolokia.server.core.service.api.JolokiaServiceManager;
 import org.jolokia.server.core.service.impl.JulLogHandler;
+import org.openjdk.jmc.jolokia.preferences.PreferenceConstants;
 import org.openjdk.jmc.ui.MCAbstractUIPlugin;
 
-public class JmcJolokiaPlugin extends MCAbstractUIPlugin {
+public class JmcJolokiaPlugin extends MCAbstractUIPlugin implements JolokiaDiscoverySettings, PreferenceConstants {
 
 	public final static String PLUGIN_ID = "org.openjdk.jmc.jolokia"; //$NON-NLS-1$
 	private static JmcJolokiaPlugin plugin;
@@ -60,11 +61,17 @@ public class JmcJolokiaPlugin extends MCAbstractUIPlugin {
 		return plugin;
 	}
 
+	@Override
+	public boolean shouldRunDiscovery() {
+		return getPreferenceStore().getBoolean(P_SCAN);
+	}
+
 	/**
 	 * @return a very basic Jolokia context to satisfy discovery. We are not interested in the
 	 *         server side aspects here.
 	 */
-	public JolokiaContext getJmcJolokiaContext() {
+	@Override
+	public JolokiaContext getJolokiaContext() {
 		StaticConfiguration configuration = new StaticConfiguration(ConfigKey.AGENT_ID, "jmc");
 		JolokiaServiceManager serviceManager = JolokiaServiceManagerFactory.createJolokiaServiceManager(configuration,
 				new JulLogHandler(PLUGIN_ID), new AllowAllRestrictor(),
