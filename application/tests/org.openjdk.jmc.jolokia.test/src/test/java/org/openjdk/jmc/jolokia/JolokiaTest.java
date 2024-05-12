@@ -59,7 +59,6 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXServiceURL;
 
 import org.awaitility.Awaitility;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jolokia.server.core.config.ConfigKey;
 import org.jolokia.server.core.config.StaticConfiguration;
 import org.jolokia.server.core.detector.ServerDetector;
@@ -67,7 +66,6 @@ import org.jolokia.server.core.restrictor.AllowAllRestrictor;
 import org.jolokia.server.core.service.JolokiaServiceManagerFactory;
 import org.jolokia.server.core.service.api.JolokiaContext;
 import org.jolokia.server.core.service.api.JolokiaServiceManager;
-import org.jolokia.server.core.service.impl.JulLogHandler;
 import org.jolokia.server.core.service.impl.StdoutLogHandler;
 import org.junit.AfterClass;
 import org.junit.Assert;
