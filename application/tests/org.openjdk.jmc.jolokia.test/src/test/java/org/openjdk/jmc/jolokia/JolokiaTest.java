@@ -131,7 +131,8 @@ public class JolokiaTest implements JolokiaDiscoverySettings, PreferenceConstant
 		String attribute = "Verbose";
 		jolokiaConnection.setAttribute(objectName, new Attribute(attribute, true));
 		Assert.assertEquals(true, jolokiaConnection.getAttribute(objectName, attribute));
-
+		//set it back as it otherwise generates a lot of noise in the output
+		jolokiaConnection.setAttribute(objectName, new Attribute(attribute, false));
 	}
 
 	private static MBeanServerConnection getJolokiaMBeanConnector() throws IOException, MalformedURLException {
