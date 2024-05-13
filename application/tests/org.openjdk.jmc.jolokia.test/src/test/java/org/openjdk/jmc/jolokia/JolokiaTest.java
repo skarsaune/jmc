@@ -145,7 +145,21 @@ public class JolokiaTest implements JolokiaDiscoverySettings, PreferenceConstant
 
 	@Test
 	public void testDiscover() {
+		//List environment to troubleshoot CI run
+		System.getProperties().entrySet().forEach(
+				entry -> System.out.println(entry.getKey() +  "=" + entry.getValue()));
+		
+		System.getenv().entrySet().forEach(
+				entry -> System.out.println(entry.getKey() +  "=" + entry.getValue()));
 
+		if( "Mac OS X".equalsIgnoreCase(System.getProperty("os.name"))) {
+			//This does not work in the JMC CI pipeline for Mac 
+			// 'D> --> Couldnt send discovery message from /127.0.0.1: java.net.BindException: Can't assign requested address
+			//  D> --> Exception during lookup: java.util.concurrent.ExecutionException: 
+			//    org.jolokia.service.discovery.MulticastUtil$CouldntSendDiscoveryPacketException: 
+			//    Can't send discovery UDP packet from /127.0.0.1: Can't assign requested address'
+			
+		}
 		discoveryListener = new JolokiaDiscoveryListener(this);
 
 		final AtomicInteger foundVms = new AtomicInteger(0);
