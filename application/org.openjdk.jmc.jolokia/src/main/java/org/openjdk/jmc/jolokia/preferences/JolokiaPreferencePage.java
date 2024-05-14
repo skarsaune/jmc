@@ -33,13 +33,23 @@
  */
 package org.openjdk.jmc.jolokia.preferences;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.openjdk.jmc.jolokia.JmcJolokiaPlugin;
 
-public class JolokiaPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage, PreferenceConstants {
+public class JolokiaPreferencePage extends FieldEditorPreferencePage
+		implements IWorkbenchPreferencePage, PreferenceConstants {
+
+	private Map<Control, Object> dependantControls = new WeakHashMap<>();
 
 	public JolokiaPreferencePage() {
 		super(GRID);
@@ -49,7 +59,7 @@ public class JolokiaPreferencePage extends FieldEditorPreferencePage implements 
 
 	public void createFieldEditors() {
 		BooleanFieldEditor mainEnabler = new BooleanFieldEditor(P_SCAN, Messages.JolokiaPreferencePage_Label,
-				getFieldEditorParent()){
+				getFieldEditorParent()) {
 			@Override
 			protected void valueChanged(boolean oldValue, boolean newValue) {
 				super.valueChanged(oldValue, newValue);
@@ -57,10 +67,10 @@ public class JolokiaPreferencePage extends FieldEditorPreferencePage implements 
 			}
 		};
 		addField(mainEnabler);
-		this.addTextField(new StringFieldEditor(P_MULTICAST_ADDRESS, Messages.getString("JolokiaPreferencePage.MulticastAddressLabel"), //$NON-NLS-1$
-				getFieldEditorParent()), Messages.getString("JolokiaPreferencePage.MulticastAddressTooltip")); //$NON-NLS-1$
-		this.addTextField(new StringFieldEditor(P_MULTICAST_PORT, Messages.getString("JolokiaPreferencePage.MulticastPortLabel"), //$NON-NLS-1$
-				getFieldEditorParent()), Messages.getString("JolokiaPreferencePage.MulticastPortTooltip")); //$NON-NLS-1$
+		this.addTextField(new StringFieldEditor(P_MULTICAST_GROUP, "Multicast Group", getFieldEditorParent()),
+				"Multicast group used by Jolokia discovery to detect instances.");
+		this.addTextField(new StringFieldEditor(P_MULTICAST_PORT, "Multicast Port", getFieldEditorParent()),
+				"Port number used by Jolokia discovery to detect instances."); //$NON-NLS-1$
 
 	}
 
@@ -71,7 +81,6 @@ public class JolokiaPreferencePage extends FieldEditorPreferencePage implements 
 	 */
 	public void init(IWorkbench workbench) {
 	}
-
 
 	private void addTextField(StringFieldEditor field, String tooltip) {
 		Text textControl = field.getTextControl(getFieldEditorParent());

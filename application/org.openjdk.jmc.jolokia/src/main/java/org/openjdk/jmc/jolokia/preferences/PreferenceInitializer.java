@@ -41,7 +41,7 @@ import org.jolokia.server.core.config.ConfigKey;
 /**
  * Class used to initialize default preference values.
  */
-public class PreferenceInitializer extends AbstractPreferenceInitializer implements PreferenceConstants{
+public class PreferenceInitializer extends AbstractPreferenceInitializer implements PreferenceConstants {
 
 	/*
 	 * (non-Javadoc)
@@ -52,8 +52,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer impleme
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = JmcJolokiaPlugin.getDefault().getPreferenceStore();
 		store.setDefault(P_SCAN, false);
-		store.setDefault(P_BROADCAST_ADDRESS, ConfigKey.MULTICAST_GROUP.getDefaultValue());
-		store.setDefault(P_BROADCAST_PORT, ConfigKey.MULTICAST_PORT.getDefaultValue());
+		store.setDefault(P_MULTICAST_GROUP, ConfigKey.MULTICAST_GROUP.getDefaultValue());
+		store.setDefault(P_MULTICAST_PORT, ConfigKey.MULTICAST_PORT.getDefaultValue());
 	}
 
 }

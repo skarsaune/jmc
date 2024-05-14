@@ -78,4 +78,14 @@ public class JmcJolokiaPlugin extends MCAbstractUIPlugin implements JolokiaDisco
 				() -> new TreeSet<ServerDetector>(Arrays.asList(ServerDetector.FALLBACK)));
 		return serviceManager.start();
 	}
+
+	@Override
+	public String getMulticastGroup() {
+		return this.getPreferenceStore().getString(P_MULTICAST_GROUP);
+	}
+
+	@Override
+	public String getMulticastPort() {
+		return this.getPreferenceStore().getString(P_MULTICAST_PORT);
+	}
 }
