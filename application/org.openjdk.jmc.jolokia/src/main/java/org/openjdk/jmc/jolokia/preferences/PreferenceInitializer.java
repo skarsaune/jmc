@@ -36,11 +36,12 @@ package org.openjdk.jmc.jolokia.preferences;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.openjdk.jmc.jolokia.JmcJolokiaPlugin;
+import org.jolokia.server.core.config.ConfigKey;
 
 /**
  * Class used to initialize default preference values.
  */
-public class PreferenceInitializer extends AbstractPreferenceInitializer {
+public class PreferenceInitializer extends AbstractPreferenceInitializer implements PreferenceConstants{
 
 	/*
 	 * (non-Javadoc)
@@ -50,7 +51,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = JmcJolokiaPlugin.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_SCAN, false);
+		store.setDefault(P_SCAN, false);
+		store.setDefault(P_BROADCAST_ADDRESS, ConfigKey.MULTICAST_GROUP.getDefaultValue());
+		store.setDefault(P_BROADCAST_PORT, ConfigKey.MULTICAST_PORT.getDefaultValue());
 	}
 
 }

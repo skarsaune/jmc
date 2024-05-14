@@ -39,7 +39,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.openjdk.jmc.jolokia.JmcJolokiaPlugin;
 
-public class JolokiaPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class JolokiaPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage, PreferenceConstants {
 
 	public JolokiaPreferencePage() {
 		super(GRID);
@@ -48,8 +48,19 @@ public class JolokiaPreferencePage extends FieldEditorPreferencePage implements 
 	}
 
 	public void createFieldEditors() {
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SCAN, Messages.JolokiaPreferencePage_Label,
-				getFieldEditorParent()));
+		BooleanFieldEditor mainEnabler = new BooleanFieldEditor(P_SCAN, Messages.JolokiaPreferencePage_Label,
+				getFieldEditorParent()){
+			@Override
+			protected void valueChanged(boolean oldValue, boolean newValue) {
+				super.valueChanged(oldValue, newValue);
+				enableDependantFields(newValue);
+			}
+		};
+		addField(mainEnabler);
+		this.addTextField(new StringFieldEditor(P_MULTICAST_ADDRESS, Messages.getString("JolokiaPreferencePage.MulticastAddressLabel"), //$NON-NLS-1$
+				getFieldEditorParent()), Messages.getString("JolokiaPreferencePage.MulticastAddressTooltip")); //$NON-NLS-1$
+		this.addTextField(new StringFieldEditor(P_MULTICAST_PORT, Messages.getString("JolokiaPreferencePage.MulticastPortLabel"), //$NON-NLS-1$
+				getFieldEditorParent()), Messages.getString("JolokiaPreferencePage.MulticastPortTooltip")); //$NON-NLS-1$
 
 	}
 
@@ -61,4 +72,23 @@ public class JolokiaPreferencePage extends FieldEditorPreferencePage implements 
 	public void init(IWorkbench workbench) {
 	}
 
+
+	private void addTextField(StringFieldEditor field, String tooltip) {
+		Text textControl = field.getTextControl(getFieldEditorParent());
+		this.addDependantField(field, textControl);
+		textControl.setToolTipText(tooltip);
+		field.getLabelControl(getFieldEditorParent()).setToolTipText(tooltip);
+
+	}
+
+	private void addDependantField(FieldEditor field, Control control) {
+		this.dependantControls.put(control, null);
+		addField(field);
+	}
+
+	private void enableDependantFields(boolean enabled) {
+		for (Control field : this.dependantControls.keySet()) {
+			field.setEnabled(enabled);
+		}
+	}
 }

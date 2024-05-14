@@ -5,7 +5,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<!-- Convenience: Regarding access rules. It appears that these packages are exported from jolokia standalone. Wondering whether eclipse caps at 36 access rules or something. Setting access rules on that specific plugin dependency does not seem to be persisted to the .classpath file, hence setting access policy globally for all plugin dependencies-->
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins">
 		<accessrules>
 			<accessrule kind="accessible" pattern="org/jolokia/**"/>
@@ -13,5 +12,8 @@
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="lib" path="/home/marska/.m2/repository/org/jolokia/jolokia-client-jmx-adapter/2.0.2/jolokia-client-jmx-adapter-2.0.2-standalone.jar"/>
+	<classpathentry kind="lib" path="/home/marska/.m2/repository/org/jolokia/jolokia-service-discovery/2.0.2/jolokia-service-discovery-2.0.2.jar"/>
+	<classpathentry kind="lib" path="/home/marska/.m2/repository/org/jolokia/jolokia-server-core/2.0.2/jolokia-server-core-2.0.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

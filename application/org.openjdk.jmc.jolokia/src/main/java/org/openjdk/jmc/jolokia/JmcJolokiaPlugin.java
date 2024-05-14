@@ -72,7 +72,7 @@ public class JmcJolokiaPlugin extends MCAbstractUIPlugin implements JolokiaDisco
 	 */
 	@Override
 	public JolokiaContext getJolokiaContext() {
-		StaticConfiguration configuration = new StaticConfiguration(ConfigKey.AGENT_ID, "jmc");
+		StaticConfiguration configuration = new StaticConfiguration(ConfigKey.AGENT_ID, "jmc");//$NON-NLS-1$
 		JolokiaServiceManager serviceManager = JolokiaServiceManagerFactory.createJolokiaServiceManager(configuration,
 				new JulLogHandler(PLUGIN_ID), new AllowAllRestrictor(),
 				() -> new TreeSet<ServerDetector>(Arrays.asList(ServerDetector.FALLBACK)));

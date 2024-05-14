@@ -39,5 +39,8 @@ package org.openjdk.jmc.jolokia.preferences;
 public interface PreferenceConstants {
 
 	public static final String P_SCAN = "discoverJolokia"; //$NON-NLS-1$
+	public static final String P_BROADCAST_ADDRESS = "broadcastAddress";//$NON-NLS-1$
+	public static final String P_BROADCAST_PORT = "broadcastPort";//$NON-NLS-1$
+
 
 }

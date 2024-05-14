@@ -76,6 +76,7 @@ import org.openjdk.jmc.jolokia.preferences.PreferenceConstants;
 import org.openjdk.jmc.rjmx.common.IConnectionDescriptor;
 import org.openjdk.jmc.rjmx.common.IServerDescriptor;
 import org.openjdk.jmc.rjmx.descriptorprovider.IDescriptorListener;
+import org.jolokia.server.core.config.ConfigKey;
 
 /**
  * I test that JMX connections done with JmcJolokiaJmxConnectionProvider are functional
@@ -197,6 +198,14 @@ public class JolokiaTest implements JolokiaDiscoverySettings, PreferenceConstant
 				new StdoutLogHandler(true), new AllowAllRestrictor(),
 				() -> new TreeSet<ServerDetector>(Arrays.asList(ServerDetector.FALLBACK)));
 		return serviceManager.start();
+	}
+
+	public String getMulticastGroup() {
+		return ConfigKey.MULTICAST_GROUP.getDefaultValue();
+	}
+
+	public String getMulticastPort() {
+		return ConfigKey.MULTICAST_PORT.getDefaultValue();
 	}
 
 }
