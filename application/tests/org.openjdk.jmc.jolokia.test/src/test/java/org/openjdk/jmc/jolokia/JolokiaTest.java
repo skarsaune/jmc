@@ -76,7 +76,6 @@ import org.openjdk.jmc.jolokia.preferences.PreferenceConstants;
 import org.openjdk.jmc.rjmx.common.IConnectionDescriptor;
 import org.openjdk.jmc.rjmx.common.IServerDescriptor;
 import org.openjdk.jmc.rjmx.descriptorprovider.IDescriptorListener;
-import org.jolokia.server.core.config.ConfigKey;
 
 /**
  * I test that JMX connections done with JmcJolokiaJmxConnectionProvider are functional

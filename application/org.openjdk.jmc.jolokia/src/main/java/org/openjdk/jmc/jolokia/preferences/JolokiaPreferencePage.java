@@ -67,10 +67,10 @@ public class JolokiaPreferencePage extends FieldEditorPreferencePage
 			}
 		};
 		addField(mainEnabler);
-		this.addTextField(new StringFieldEditor(P_MULTICAST_GROUP, "Multicast Group", getFieldEditorParent()),
-				"Multicast group used by Jolokia discovery to detect instances.");
-		this.addTextField(new StringFieldEditor(P_MULTICAST_PORT, "Multicast Port", getFieldEditorParent()),
-				"Port number used by Jolokia discovery to detect instances."); //$NON-NLS-1$
+		this.addTextField(new StringFieldEditor(P_MULTICAST_GROUP, Messages.JolokiaPreferencePage_MulticastGroupLabel,
+				getFieldEditorParent()), Messages.JolokiaPreferencePage_MulticastGroupTooltip);
+		this.addTextField(new StringFieldEditor(P_MULTICAST_PORT, Messages.JolokiaPreferencePage_MulticastPortLabel,
+				getFieldEditorParent()), Messages.JolokiaPreferencePage_MulticastPortTooltip);
 
 	}
 

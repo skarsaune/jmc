@@ -39,6 +39,10 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.openjdk.jmc.jolokia.preferences.messages"; //$NON-NLS-1$
 	public static String JolokiaPreferencePage_Description;
 	public static String JolokiaPreferencePage_Label;
+	public static String JolokiaPreferencePage_MulticastGroupLabel;
+	public static String JolokiaPreferencePage_MulticastGroupTooltip;
+	public static String JolokiaPreferencePage_MulticastPortLabel;
+	public static String JolokiaPreferencePage_MulticastPortTooltip;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
