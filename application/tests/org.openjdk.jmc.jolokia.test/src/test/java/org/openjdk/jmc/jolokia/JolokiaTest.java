@@ -199,12 +199,19 @@ public class JolokiaTest implements JolokiaDiscoverySettings, PreferenceConstant
 		return serviceManager.start();
 	}
 
+	@Override
 	public String getMulticastGroup() {
 		return ConfigKey.MULTICAST_GROUP.getDefaultValue();
 	}
 
-	public String getMulticastPort() {
-		return ConfigKey.MULTICAST_PORT.getDefaultValue();
+	@Override
+	public int getMulticastPort() {
+		return Integer.parseInt(ConfigKey.MULTICAST_PORT.getDefaultValue());
+	}
+
+	@Override
+	public int getDiscoveryTimeout() {
+		return 1000;
 	}
 
 }

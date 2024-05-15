@@ -41,5 +41,5 @@ public interface PreferenceConstants {
 	public static final String P_SCAN = "discoverJolokia"; //$NON-NLS-1$
 	public static final String P_MULTICAST_GROUP = "multicastGroup";//$NON-NLS-1$
 	public static final String P_MULTICAST_PORT = "multicastPort";//$NON-NLS-1$
-
+	public static final String P_DISCOVER_TIMEOUT = "discoverTimeout";//$NON-NLS-1$ 
 }

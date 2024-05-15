@@ -39,6 +39,7 @@ import java.util.WeakHashMap;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
@@ -69,9 +70,10 @@ public class JolokiaPreferencePage extends FieldEditorPreferencePage
 		addField(mainEnabler);
 		this.addTextField(new StringFieldEditor(P_MULTICAST_GROUP, Messages.JolokiaPreferencePage_MulticastGroupLabel,
 				getFieldEditorParent()), Messages.JolokiaPreferencePage_MulticastGroupTooltip);
-		this.addTextField(new StringFieldEditor(P_MULTICAST_PORT, Messages.JolokiaPreferencePage_MulticastPortLabel,
+		this.addTextField(new IntegerFieldEditor(P_MULTICAST_PORT, Messages.JolokiaPreferencePage_MulticastPortLabel,
 				getFieldEditorParent()), Messages.JolokiaPreferencePage_MulticastPortTooltip);
-
+		this.addDependantField(new IntegerFieldEditor(P_DISCOVER_TIMEOUT,
+				Messages.JolokiaPreferencePage_DiscoverTimeoutLabel, getFieldEditorParent()), getControl());
 	}
 
 	/*

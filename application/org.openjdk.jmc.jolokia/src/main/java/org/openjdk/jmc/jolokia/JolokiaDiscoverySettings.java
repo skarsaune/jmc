@@ -7,8 +7,10 @@ public interface JolokiaDiscoverySettings {
 
 	JolokiaContext getJolokiaContext();
 
-	String getMulticastPort();
-
 	String getMulticastGroup();
+
+	int getMulticastPort();
+
+	int getDiscoveryTimeout();
 
 }

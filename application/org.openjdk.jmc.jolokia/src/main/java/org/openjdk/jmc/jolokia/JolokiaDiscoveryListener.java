@@ -68,7 +68,9 @@ public class JolokiaDiscoveryListener extends AbstractCachedDescriptorProvider i
 		try {
 			JolokiaDiscovery jolokiaDiscovery = new JolokiaDiscovery();
 			jolokiaDiscovery.init(this.settings.getJolokiaContext());
-			for (Object object : jolokiaDiscovery.lookupAgents()) {
+			for (Object object : jolokiaDiscovery.lookupAgentsWithTimeoutAndMulticastAddress(
+					this.settings.getDiscoveryTimeout(), this.settings.getMulticastGroup(),
+					this.settings.getMulticastPort())) {
 				try {
 
 					@SuppressWarnings("unchecked")
