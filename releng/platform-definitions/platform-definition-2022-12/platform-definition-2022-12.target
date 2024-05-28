@@ -54,6 +54,7 @@
             <unit id="org.jolokia.client-jmx-adapter.standalone" version="2.0.2"/>
             <unit id="org.jolokia.service.discovery" version="2.0.2"/>
             <unit id="org.jolokia.server.core" version="2.0.2"/>
+            <unit id="org.jolokia.client-kubernetes.standalone" version="2.0.2"/>
             <unit id="com.github.tomakehurst.wiremock-standalone" version="2.27.2"/>
             <unit id="fireplace-swing" version="0.0.1.rc3"/>
             <unit id="fireplace-swt-awt-bridge" version="0.0.1.rc3"/>
