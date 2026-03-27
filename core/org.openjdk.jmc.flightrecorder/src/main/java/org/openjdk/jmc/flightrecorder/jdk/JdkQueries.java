@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -132,6 +132,11 @@ import static org.openjdk.jmc.flightrecorder.jdk.JdkAttributes.SWEEP_METHOD_RECL
 import static org.openjdk.jmc.flightrecorder.jdk.JdkAttributes.SWEEP_METHOD_SWEPT;
 import static org.openjdk.jmc.flightrecorder.jdk.JdkAttributes.SWEEP_METHOD_ZOMBIFIED;
 import static org.openjdk.jmc.flightrecorder.jdk.JdkAttributes.THREAD_DUMP_RESULT;
+import static org.openjdk.jmc.flightrecorder.jdk.JdkAttributes.THREADS_ACCUMULATED_COUNT;
+import static org.openjdk.jmc.flightrecorder.jdk.JdkAttributes.THREADS_ACTIVE_COUNT;
+import static org.openjdk.jmc.flightrecorder.jdk.JdkAttributes.THREADS_DAEMON_COUNT;
+import static org.openjdk.jmc.flightrecorder.jdk.JdkAttributes.THREADS_PEAK_COUNT;
+
 import static org.openjdk.jmc.flightrecorder.jdk.JdkAttributes.UNALLOCATED;
 
 import org.openjdk.jmc.common.item.Aggregators;
@@ -148,8 +153,8 @@ public final class JdkQueries {
 			.select(ALLOC_INSIDE_TLAB_AVG).select(ALLOC_INSIDE_TLAB_SUM).groupBy(ALLOCATION_CLASS).build();
 	public static final IItemQuery ALLOC_INSIDE_TLAB_BY_THREAD = fromWhere(JdkFilters.ALLOC_INSIDE_TLAB)
 			.select(ALLOC_INSIDE_TLAB_AVG).select(ALLOC_INSIDE_TLAB_SUM).groupBy(EVENT_THREAD).build();
-	public static final IItemQuery JFR_DATA_LOST = fromWhere(JdkFilters.JFR_DATA_LOST)
-			.select(END_TIME, EVENT_THREAD, FLR_DATA_LOST).build();
+	public static final IItemQuery JFR_DATA_LOST = fromWhere(JdkFilters.JFR_DATA_LOST).select(END_TIME, FLR_DATA_LOST)
+			.build();
 	public static final IItemQuery CLASS_LOAD = fromWhere(JdkFilters.CLASS_LOAD)
 			.select(CLASS_LOADED, CLASS_DEFINING_CLASSLOADER, CLASS_INITIATING_CLASSLOADER, EVENT_THREAD, DURATION)
 			.build();
@@ -236,6 +241,8 @@ public final class JdkQueries {
 			.build();
 	public static final IItemQuery SYSTEM_PROPERTIES = fromWhere(JdkFilters.SYSTEM_PROPERTIES)
 			.select(ENVIRONMENT_KEY, ENVIRONMENT_VALUE).build();
+	public static final IItemQuery THREAD_STATISTICS = fromWhere(JdkFilters.THREAD_STATISTICS)
+			.select(THREADS_ACTIVE_COUNT, THREADS_DAEMON_COUNT, THREADS_PEAK_COUNT, THREADS_ACCUMULATED_COUNT).build();
 	public static final IItemQuery THREAD_DUMP = fromWhere(JdkFilters.THREAD_DUMP).select(END_TIME, THREAD_DUMP_RESULT)
 			.build();
 	public static final IItemQuery THROWABLES_STATISTICS = fromWhere(JdkFilters.THROWABLES_STATISTICS)

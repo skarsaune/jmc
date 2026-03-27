@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -89,6 +89,7 @@ import org.openjdk.jmc.flightrecorder.ui.common.FlavorSelector.FlavorSelectorSta
 import org.openjdk.jmc.flightrecorder.ui.common.ImageConstants;
 import org.openjdk.jmc.flightrecorder.ui.common.ItemList;
 import org.openjdk.jmc.flightrecorder.ui.common.ItemList.ItemListBuilder;
+import org.openjdk.jmc.flightrecorder.ui.common.TreeExpandCollapseSupport;
 import org.openjdk.jmc.flightrecorder.ui.common.TypeFilterBuilder;
 import org.openjdk.jmc.flightrecorder.ui.messages.internal.Messages;
 import org.openjdk.jmc.flightrecorder.ui.selection.SelectionStoreActionToolkit;
@@ -209,6 +210,7 @@ public class EventBrowserPage extends AbstractDataPage {
 			treeSash = new SashForm(form.getBody(), SWT.HORIZONTAL);
 			toolkit.adapt(treeSash);
 			typeFilterTree = DataPageToolkit.buildEventTypeTree(treeSash, toolkit, this::onTypeChange, false);
+			TreeExpandCollapseSupport.installFor(typeFilterTree.getViewer());
 			MCContextMenuManager mm = typeFilterTree.getMenuManager();
 			IAction addPageAction = ActionToolkit.action(() -> DataPageToolkit.addPage(selectedTypes),
 					Messages.EventBrowserPage_NEW_PAGE_USING_TYPES_ACTION, NEW_PAGE_ICON);
@@ -312,7 +314,6 @@ public class EventBrowserPage extends AbstractDataPage {
 			}
 
 			// FIXME: Possibly move to attribute toolkit/handler?
-			// FIXME: Make sure to get Event Type as the first column
 			// FIXME: Stream<IType> -> Stream<IAttribute> should be delegated to some context (e.g. the editor)
 			Stream<IAttribute<?>> commonAttributes = Stream.empty();
 			if (types.hasNext()) {

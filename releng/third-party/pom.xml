@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+   Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
 
    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 
    The contents of this file are subject to the terms of either the Universal Permissive License
-   v 1.0 as shown at http://oss.oracle.com/licenses/upl
+   v 1.0 as shown at https://oss.oracle.com/licenses/upl
 
    or the following license:
 
@@ -38,7 +38,7 @@
 	<groupId>org.openjdk.jmc</groupId>
 	<artifactId>external-dependencies</artifactId>
 	<packaging>war</packaging>
-	<version>${revision}${changelist}</version>
+	<version>10.0.0</version>
 
 	<properties>
 		<!-- Config -->
@@ -51,22 +51,22 @@
 		<jetty-maven-plugin.version>11.0.15</jetty-maven-plugin.version>
 		<maven-enforcer-plugin.version>3.3.0</maven-enforcer-plugin.version>
 		<!-- Versions -->
-		<jakarta.mail.version>2.0.1</jakarta.mail.version>
-		<angus.activation.version>2.0.0</angus.activation.version>
-		<jakarta.activation.version>2.1.1</jakarta.activation.version>
+		<jakarta.mail.version>2.0.5</jakarta.mail.version>
+		<angus.activation.version>2.0.3</angus.activation.version>
+		<jakarta.activation.version>2.1.4</jakarta.activation.version>
 		<osgi-resource-locator.version>1.0.3</osgi-resource-locator.version>
-		<owasp.encoder.version>1.2.3</owasp.encoder.version>
-		<lz4.version>1.8.0</lz4.version>
+		<owasp.encoder.version>1.4.0</owasp.encoder.version>
+		<lz4.version>1.10.4</lz4.version>
 		<hdrhistogram.version>2.2.2</hdrhistogram.version>
 		<jemmy.version>2.0.0</jemmy.version>
-		<jetty.version>12.0.6</jetty.version>
+		<jetty.version>12.1.0</jetty.version>
 		<spifly.version>1.3.7</spifly.version>
-		<jolokia.version>2.0.2</jolokia.version>
+		<jolokia.version>2.5.1</jolokia.version>
 		<wiremock.version>2.27.2</wiremock.version>
-		<fireplace.version>0.0.1-rc3</fireplace.version>
-		<radiance.version>6.0.0</radiance.version>
+		<fireplace.version>0.0.1-rc.9</fireplace.version>
+		<radiance.version>8.5.0</radiance.version>
 		<jakarta.inject.version>2.0.1</jakarta.inject.version>
-		<jakarta.annotation.version>1.3.5</jakarta.annotation.version>
+		<jakarta.annotation.version>3.0.0</jakarta.annotation.version>
 	</properties>
 
 	<build>
@@ -104,7 +104,7 @@
 									<id>org.owasp.encoder:encoder:${owasp.encoder.version}</id>
 								</artifact>
 								<artifact>
-									<id>org.lz4:lz4-java:${lz4.version}</id>
+									<id>at.yawk.lz4:lz4-java:${lz4.version}</id>
 								</artifact>
 								<artifact>
 									<id>org.hdrhistogram:HdrHistogram:${hdrhistogram.version}</id>
@@ -166,16 +166,77 @@
 								</artifact>
 								<artifact>
 									<id>org.jolokia:jolokia-service-discovery:${jolokia.version}</id>
-									<override>true</override>
-									<instructions>
-										<Export-Package>org.jolokia.service.discovery</Export-Package>
-									</instructions>
 								</artifact>
+								<artifact>
+									<id>org.jolokia:jolokia-service-serializer:${jolokia.version}</id>
+								</artifact>
+                                <artifact>
+                                    <id>org.jolokia:jolokia-core:${jolokia.version}</id>
+                                </artifact>
 								<artifact>
 									<id>org.jolokia:jolokia-server-core:${jolokia.version}</id>
 								</artifact>
 								<artifact>
+									<id>org.jolokia:jolokia-client-java:${jolokia.version}</id>
+									<transitive>false</transitive>
+								</artifact>
+								<artifact>
 									<id>org.osgi:org.osgi.service.servlet:2.0.0</id>
+								</artifact>
+								<artifact><id>org.apache.httpcomponents:httpcore:4.4.16</id></artifact>
+								<artifact><id>org.apache.httpcomponents:httpclient:4.5.14</id></artifact>
+								<artifact>
+									<id>org.jolokia:jolokia-client-kubernetes:jar:standalone:${jolokia.version}</id>
+									<override>true</override>
+									<transitive>false</transitive>
+									<instructions>
+							            <Bundle-SymbolicName>org.jolokia.client.kubernetes</Bundle-SymbolicName>
+							            <Bundle-Description>Jolokia Kubernetes adapter</Bundle-Description>
+							            <Import-Package>
+							              <!-- jolokia-json -->
+							              org.jolokia.json;version="${jolokia.version}",
+							              <!-- jolokia-core -->
+							              org.jolokia.core.util;version="${jolokia.version}",
+							              <!-- jolokia-client-java -->
+							              org.jolokia.client;version="${jolokia.version}",
+							              org.jolokia.client.spi;version="${jolokia.version}",
+							              <!-- jolokia-client-java-httpclient4 -->
+							              org.jolokia.client.httpclient4;version="${jolokia.version},
+							              <!-- jolokia-client-jmx-adapter -->
+							              org.jolokia.client.jmxadapter;version="${jolokia.version}",
+							              <!-- jolokia-server-core -->
+							              org.jolokia.server.core.util;version="${jolokia.version}",
+							              <!-- httpcore -->
+							              org.apache.http,
+							              org.apache.http.entity,
+							              org.apache.http.message,
+							              org.apache.http.params,
+							              org.apache.http.protocol,
+							              <!-- httpclient -->
+							              org.apache.http.client,
+							              org.apache.http.client.methods,
+							              org.apache.http.conn
+							            </Import-Package>
+							            <Export-Package>
+							              org.jolokia.kubernetes.client
+							            </Export-Package>
+							          </instructions>
+								</artifact>
+								<artifact>
+									<id>org.jolokia:jolokia-client-java-httpclient4:${jolokia.version}</id>
+									  <override>true</override>
+  										<instructions>
+  											<Bundle-Name>Jolokia HTTP4 Client</Bundle-Name>
+											<Bundle-SymbolicName>org.jolokia.client.httpclient4</Bundle-SymbolicName>
+    										<Import-Package>
+      											org.slf4j;version="[1.7,3)",
+      											*
+    										</Import-Package>
+    										<Export-Package>org.jolokia.client.httpclient4</Export-Package>
+  										</instructions>
+								</artifact>
+								<artifact>
+									<id>org.awaitility:awaitility:4.0.0</id>
 								</artifact>
 								<artifact>
 									<id>com.github.tomakehurst:wiremock-standalone:${wiremock.version}</id>

@@ -207,7 +207,7 @@ This recording is only 9.903 s long, consider creating a recording longer than 
         <rule>
             <id>IncreasingMetaSpaceLiveSet</id>
             <severity>OK</severity>
-            <summary>The class data does not seem to increase during the recording.</summary>
+            <summary>Metaspace is the area of memory allocated for the JVM to store class metadata. The class metadata does not seem to increase during the recording.</summary>
         </rule>
         <rule>
             <id>JavaBlocking</id>
@@ -240,7 +240,7 @@ This recording is only 9.903 s long, consider creating a recording longer than 
         <rule>
             <id>MetaspaceOom</id>
             <severity>OK</severity>
-            <summary>The metaspace was not exhausted during this recording.</summary>
+            <summary>Java class metadata is allocated in native memory (metaspace). When the amount of native memory needed for a class metadata exceeds MaxMetaspaceSize, a java.lang.OutOfMemoryError exception with a detail Metaspace is thrown. The amount of metaspace that can be used for class metadata is limited by the parameter MaxMetaspaceSize, which is specified on the command line.The metaspace was not exhausted during this recording.</summary>
         </rule>
         <rule>
             <id>MethodProfiling</id>
@@ -254,11 +254,17 @@ This recording is only 9.903 s long, consider creating a recording longer than 
         <rule>
             <id>Options</id>
             <severity>OK</severity>
-            <summary>No undocumented, deprecated or non-recommended option flags were detected.</summary>
+            <summary>Deprecated option flags were detected.</summary>
+            <explanation>The following option flag is or will be deprecated. &lt;ul&gt;&lt;li&gt;-XX:+UnlockCommercialFeatures: Deprecated in Java 11.&lt;/li&gt;&lt;/ul&gt; Deprecated option flags should be avoided. In some cases they enable legacy code and in other cases they are ignored completely. They will usually be removed in a later Java release.</explanation>
         </rule>
         <rule>
             <id>OverAggressiveRecordingSetting</id>
             <severity>Not Applicable</severity>
+        </rule>
+        <rule>
+            <id>PID1Rule</id>
+            <severity>Ignore</severity>
+            <summary>There is no PID information available.</summary>
         </rule>
         <rule>
             <id>PasswordsInArguments</id>
@@ -312,6 +318,10 @@ This recording is only 9.903 s long, consider creating a recording longer than 
             <id>VMOperations</id>
             <severity>OK</severity>
             <summary>No excessively long VM operations were found in this recording (the longest was 30.318 ms).</summary>
+        </rule>
+        <rule>
+            <id>ZGCAllocationStallRule</id>
+            <severity>Not Applicable</severity>
         </rule>
         <rule>
             <id>biasedLockingRevocation</id>

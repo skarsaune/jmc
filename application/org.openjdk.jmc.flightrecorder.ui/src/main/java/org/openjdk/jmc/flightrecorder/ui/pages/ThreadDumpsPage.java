@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -92,6 +92,7 @@ import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.FlavorSelector;
 import org.openjdk.jmc.flightrecorder.ui.common.FlavorSelector.FlavorSelectorState;
 import org.openjdk.jmc.flightrecorder.ui.common.ImageConstants;
+import org.openjdk.jmc.flightrecorder.ui.common.TreeExpandCollapseSupport;
 import org.openjdk.jmc.flightrecorder.ui.messages.internal.Messages;
 import org.openjdk.jmc.ui.UIPlugin;
 import org.openjdk.jmc.ui.common.util.FilterMatcher;
@@ -303,6 +304,7 @@ public class ThreadDumpsPage extends AbstractDataPage {
 
 			};
 			tree.setLabelProvider(labelProvider);
+			TreeExpandCollapseSupport.installFor(tree);
 			tree.addSelectionChangedListener(
 					s -> text.setText(joinSelection(((IStructuredSelection) s.getSelection()).toList())));
 			treeTextFilter = TreeFilterWithTextInput.addFilterControl(filterComposite, tree,

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -33,7 +33,6 @@
 package org.openjdk.jmc.flightrecorder.ui.pages.itemhandler;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -73,7 +72,7 @@ class AttributeComponentConfiguration {
 		uncommonChartableAttributes = new HashMap<>();
 		lineChartableAttributes = new HashMap<>();
 		forEachType(items);
-		populateAttributeMaps(isSuitableForLineCharts(items, allTypes));
+		populateAttributeMaps(isSuitableForLineCharts(allTypes));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -117,16 +116,8 @@ class AttributeComponentConfiguration {
 		}
 	}
 
-	private static boolean isSuitableForLineCharts(IItemCollection items, Map<String, IType<?>> types) {
-		// NOTE: JMC-4520 - Only allowing line charts for one event type, which only has one event array. 
-		if (types.values().size() == 1) {
-			Iterator<IItemIterable> iterator = items.iterator();
-			if (iterator.hasNext()) {
-				iterator.next();
-				return !iterator.hasNext();
-			}
-		}
-		return false;
+	private static boolean isSuitableForLineCharts(Map<String, IType<?>> types) {
+		return types.values().size() == 1;
 	}
 
 	public Map<String, IAttribute<?>> getAllAttributes() {

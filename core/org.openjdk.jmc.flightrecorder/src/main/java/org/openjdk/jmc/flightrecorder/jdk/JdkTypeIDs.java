@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -58,6 +58,7 @@ public final class JdkTypeIDs {
 	public static final String OS_MEMORY_SUMMARY = PREFIX + "PhysicalMemory";
 	public static final String OS_INFORMATION = PREFIX + "OSInformation";
 	public static final String CPU_INFORMATION = PREFIX + "CPUInformation";
+	public static final String VIRTUALIZATION_INFORMATION = PREFIX + "VirtualizationInformation";
 	public static final String THREAD_ALLOCATION_STATISTICS = PREFIX + "ThreadAllocationStatistics";
 	public static final String HEAP_CONF = PREFIX + "GCHeapConfiguration";
 	public static final String GC_CONF = PREFIX + "GCConfiguration";
@@ -107,6 +108,8 @@ public final class JdkTypeIDs {
 	public static final String METASPACE_SUMMARY = PREFIX + "MetaspaceSummary";
 	public static final String GARBAGE_COLLECTION = PREFIX + "GarbageCollection";
 	public static final String CONCURRENT_MODE_FAILURE = PREFIX + "ConcurrentModeFailure";
+
+	public static final String ZGC_ALLOCATION_STALL = PREFIX + "ZAllocationStall";
 
 	public static final String THROWABLES_STATISTICS = PREFIX + "ExceptionStatistics";
 	public static final String ERRORS_THROWN = PREFIX + "JavaErrorThrow";
@@ -183,6 +186,7 @@ public final class JdkTypeIDs {
 	public static final String BIASED_LOCK_REVOCATION = PREFIX + "BiasedLockRevocation";
 	public static final String BIASED_LOCK_CLASS_REVOCATION = PREFIX + "BiasedLockClassRevocation";
 	public static final String GC_G1_ADAPTIVE_IHOP = PREFIX + "G1AdaptiveIHOP";
+	public static final String TENURING_DISTRIBUTION = PREFIX + "TenuringDistribution";
 
 	public static final String RECORDINGS = PREFIX + "ActiveRecording";
 	public static final String RECORDING_SETTING = PREFIX + "ActiveSetting";

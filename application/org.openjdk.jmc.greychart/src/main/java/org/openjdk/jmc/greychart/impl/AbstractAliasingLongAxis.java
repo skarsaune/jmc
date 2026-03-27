@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -62,7 +62,8 @@ public abstract class AbstractAliasingLongAxis extends AbstractAxis implements L
 	 * @param owner
 	 *            the chart that owns the axis.
 	 */
-	public AbstractAliasingLongAxis(SeriesGreyChart owner, long[] aliasingArray, long defaultRange, long defaultDiff) {
+	public AbstractAliasingLongAxis(SeriesGreyChart<?> owner, long[] aliasingArray, long defaultRange,
+			long defaultDiff) {
 		super(owner);
 		setTickMarksEnabled(true);
 		setNumberOfTicks(5);
@@ -164,10 +165,14 @@ public abstract class AbstractAliasingLongAxis extends AbstractAxis implements L
 	}
 
 	public void setRange(Number min, Number max) {
+		// Avoid unnecessary fireAxisChange() calls by checking if values actually changed
+		if (m_min != null && m_max != null && m_min.longValue() == min.longValue()
+				&& m_max.longValue() == max.longValue()) {
+			return; // No change, skip update
+		}
 		m_min = min;
 		m_max = max;
 		setRangeInternal(min, max);
-		// FIXME: Notify chart of change!
 	}
 
 	public void setRange(Number max) {

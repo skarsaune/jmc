@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2021, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -83,13 +83,13 @@ import org.openjdk.jmc.flightrecorder.ui.messages.internal.Messages;
 import org.openjdk.jmc.flightrecorder.ui.preferences.PreferenceKeys;
 import org.openjdk.jmc.flightrecorder.ui.selection.IFlavoredSelection;
 import org.openjdk.jmc.flightrecorder.ui.selection.SelectionStore;
-import org.openjdk.jmc.flightrecorder.ui.websocket.WebsocketServer;
 import org.openjdk.jmc.ui.MCPathEditorInput;
 import org.openjdk.jmc.ui.idesupport.IDESupportUIToolkit;
 import org.openjdk.jmc.ui.misc.CompositeToolkit;
 import org.openjdk.jmc.ui.misc.DialogToolkit;
 import org.openjdk.jmc.ui.misc.DisplayToolkit;
 import org.openjdk.jmc.ui.misc.SelectionProvider;
+import org.openjdk.jmc.ui.websocket.WebsocketPlugin;
 
 public class JfrEditor extends EditorPart implements INavigationLocationProvider, IPageContainer {
 
@@ -113,8 +113,6 @@ public class JfrEditor extends EditorPart implements INavigationLocationProvider
 	private Reference<ResultPage> resultPageRef = new WeakReference<>(null);
 	private RuleManager ruleEngine;
 	private IPropertyChangeListener analysisEnabledListener;
-	private IPropertyChangeListener websocketServerEnabledListener;
-	private WebsocketServer websocketServer;
 
 	public JfrEditor() {
 		super();
@@ -126,29 +124,7 @@ public class JfrEditor extends EditorPart implements INavigationLocationProvider
 				}
 			}
 		};
-		if (FlightRecorderUI.getDefault().isWebsocketServerEnabled()) {
-			int websocketServerPort = FlightRecorderUI.getDefault().getWebsocketPort();
-			websocketServer = new WebsocketServer(websocketServerPort);
-		}
-		websocketServerEnabledListener = e -> {
-			if (e.getProperty().equals(PreferenceKeys.PROPERTY_WEBSOCKET_SERVER_PORT)) {
-				int newWebsocketServerPort = FlightRecorderUI.parseWebsocketPort((String) e.getNewValue());
-				if (newWebsocketServerPort > 0) {
-					if (websocketServer != null) {
-						websocketServer.shutdown();
-						websocketServer = null;
-					}
-					websocketServer = new WebsocketServer(newWebsocketServerPort);
-				} else {
-					if (websocketServer != null) {
-						websocketServer.shutdown();
-						websocketServer = null;
-					}
-				}
-			}
-		};
 		FlightRecorderUI.getDefault().getPreferenceStore().addPropertyChangeListener(analysisEnabledListener);
-		FlightRecorderUI.getDefault().getPreferenceStore().addPropertyChangeListener(websocketServerEnabledListener);
 	}
 
 	@Override
@@ -214,15 +190,15 @@ public class JfrEditor extends EditorPart implements INavigationLocationProvider
 		if (!items.hasItems() && currentPage != null) {
 			selectionItems = getModel().getItems().apply(getDisplayablePage(currentPage).getDefaultSelectionFilter());
 		}
-		if (websocketServer != null) {
-			websocketServer.notifyAll(selectionItems);
+		if (WebsocketPlugin.getDefault().getServerEnabled() == true) {
+			WebsocketPlugin.getDefault().notifyAll(selectionItems);
 		}
 		getSite().getSelectionProvider().setSelection(new StructuredSelection(selectionItems));
 	}
 
 	@Override
 	public void showSelection(IFlavoredSelection selection) {
-		getSite().getSelectionProvider().setSelection(selection);
+		getSite().getSelectionProvider().setSelection(new StructuredSelection(selection));
 	}
 
 	@Override
@@ -429,7 +405,6 @@ public class JfrEditor extends EditorPart implements INavigationLocationProvider
 	public void dispose() {
 		ruleEngine.dispose();
 		FlightRecorderUI.getDefault().getPreferenceStore().removePropertyChangeListener(analysisEnabledListener);
-		FlightRecorderUI.getDefault().getPreferenceStore().removePropertyChangeListener(websocketServerEnabledListener);
 		super.dispose();
 	}
 

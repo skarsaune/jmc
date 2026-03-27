@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -80,12 +80,14 @@ public final class JdkFilters {
 	public static final IItemFilter ALLOC_ALL = ItemFilters.type(JdkTypeIDs.ALLOC_INSIDE_TLAB,
 			JdkTypeIDs.ALLOC_OUTSIDE_TLAB);
 	public static final IItemFilter OBJ_ALLOC = ItemFilters.type(JdkTypeIDs.OBJ_ALLOC_SAMPLE);
+	public static final IItemFilter ZGC_ALLOCATION_STALL = ItemFilters.type(JdkTypeIDs.ZGC_ALLOCATION_STALL);
 	public static final IItemFilter REFERENCE_STATISTICS = ItemFilters.type(JdkTypeIDs.GC_REFERENCE_STATISTICS);
 	public static final IItemFilter GARBAGE_COLLECTION = ItemFilters.type(JdkTypeIDs.GARBAGE_COLLECTION);
 	public static final IItemFilter OLD_GARBAGE_COLLECTION = ItemFilters
 			.type(JdkTypeIDs.GC_COLLECTOR_OLD_GARBAGE_COLLECTION);
 	public static final IItemFilter YOUNG_GARBAGE_COLLECTION = ItemFilters
 			.type(JdkTypeIDs.GC_COLLECTOR_YOUNG_GARBAGE_COLLECTION);
+	public static final IItemFilter TENURING_DISTRIBUTION = ItemFilters.type(JdkTypeIDs.TENURING_DISTRIBUTION);
 	public static final IItemFilter CONCURRENT_MODE_FAILURE = ItemFilters.type(JdkTypeIDs.CONCURRENT_MODE_FAILURE);
 	public static final IItemFilter ERRORS = ItemFilters.type(JdkTypeIDs.ERRORS_THROWN);
 	public static final IItemFilter EXCEPTIONS = ItemFilters.type(JdkTypeIDs.EXCEPTIONS_THROWN);
@@ -151,6 +153,7 @@ public final class JdkFilters {
 	public static final IItemFilter BIASED_LOCKING_REVOCATIONS = ItemFilters.type(
 			JdkTypeIDs.BIASED_LOCK_CLASS_REVOCATION, JdkTypeIDs.BIASED_LOCK_REVOCATION,
 			JdkTypeIDs.BIASED_LOCK_SELF_REVOCATION);
+	public static final IItemFilter THREAD_STATISTICS = ItemFilters.type(JdkTypeIDs.THREAD_STATISTICS);
 	public static final IItemFilter THREAD_CPU_LOAD = ItemFilters.type(JdkTypeIDs.THREAD_CPU_LOAD);
 	public static final IItemFilter NATIVE_METHOD_SAMPLE = ItemFilters.type(JdkTypeIDs.NATIVE_METHOD_SAMPLE);
 	public static final IItemFilter THREAD_START = ItemFilters.type(JdkTypeIDs.JAVA_THREAD_START);

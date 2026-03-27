@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -98,6 +98,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormText;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openjdk.jmc.common.collection.IteratorToolkit;
 import org.openjdk.jmc.common.item.IAggregator;
 import org.openjdk.jmc.common.item.IAttribute;
 import org.openjdk.jmc.common.item.ICanonicalAccessorFactory;
@@ -198,10 +199,11 @@ public class DataPageToolkit {
 
 		// FIXME: Handle ColorProvider and combined events
 		Map<String, Integer> columnsOrderMap = new HashMap<>();
-		columnsOrderMap.put(createColumnId(JfrAttributes.START_TIME), 1);
-		columnsOrderMap.put(createColumnId(JfrAttributes.DURATION), 2);
-		columnsOrderMap.put(createColumnId(JfrAttributes.END_TIME), 3);
-		columnsOrderMap.put(createColumnId(JfrAttributes.EVENT_THREAD), 4);
+		columnsOrderMap.put(createColumnId(JfrAttributes.EVENT_TYPE), 1);
+		columnsOrderMap.put(createColumnId(JfrAttributes.START_TIME), 2);
+		columnsOrderMap.put(createColumnId(JfrAttributes.DURATION), 3);
+		columnsOrderMap.put(createColumnId(JfrAttributes.END_TIME), 4);
+		columnsOrderMap.put(createColumnId(JfrAttributes.EVENT_THREAD), 5);
 		DEFAULT_COLUMNS_ORDER = Collections.unmodifiableMap(columnsOrderMap);
 	}
 
@@ -641,13 +643,16 @@ public class DataPageToolkit {
 
 	public static boolean addEndTimeLines(
 		XYDataRenderer renderer, IItemCollection items, boolean fill, Stream<IAttribute<IQuantity>> yAttributes) {
-		// FIXME: JMC-4520 - Handle multiple item iterables
-		Iterator<IItemIterable> ii = items.iterator();
-		if (ii.hasNext()) {
-			IItemIterable itemStream = ii.next();
-			IType<IItem> type = itemStream.getType();
-			// FIXME: A better way to ensure sorting by endTime
-			return yAttributes.peek(a -> addEndTimeLine(renderer, itemStream.iterator(), type, a, fill))
+		if (items.hasItems()) {
+			List<Iterator<IItem>> iterators = new ArrayList<>();
+			for (IItemIterable ii : items) {
+				iterators.add(ii.iterator());
+			}
+			IType<IItem> type = items.iterator().next().getType();
+			IMemberAccessor<IQuantity, IItem> accessor = JfrAttributes.END_TIME.getAccessor(type);
+			Comparator<IItem> comparator = Comparator.comparing(item -> accessor.getMember(item));
+			return yAttributes.peek(
+					a -> addEndTimeLine(renderer, IteratorToolkit.mergedSorting(iterators, comparator), type, a, fill))
 					.mapToLong(a -> 1L).sum() > 0;
 		}
 		return false;
@@ -681,12 +686,25 @@ public class DataPageToolkit {
 		createChartTooltip(chart, ChartToolTipProvider::new);
 	}
 
+	public static void createChartTooltip(ChartTextCanvas chart) {
+		createChartTooltip(chart, ChartToolTipProvider::new);
+	}
+
 	public static void createChartTimestampTooltip(ChartCanvas chart) {
 		createChartTooltip(chart, JfrAttributes.START_TIME, JfrAttributes.END_TIME, JfrAttributes.DURATION,
 				JfrAttributes.EVENT_TYPE, JfrAttributes.EVENT_STACKTRACE);
 	}
 
+	public static void createChartTimestampTooltip(ChartTextCanvas chart) {
+		createChartTooltip(chart, JfrAttributes.START_TIME, JfrAttributes.END_TIME, JfrAttributes.DURATION,
+				JfrAttributes.EVENT_TYPE, JfrAttributes.EVENT_STACKTRACE);
+	}
+
 	public static void createChartTooltip(ChartCanvas chart, IAttribute<?> ... excludedAttributes) {
+		createChartTooltip(chart, new HashSet<>(Arrays.asList(excludedAttributes)));
+	}
+
+	public static void createChartTooltip(ChartTextCanvas chart, IAttribute<?> ... excludedAttributes) {
 		createChartTooltip(chart, new HashSet<>(Arrays.asList(excludedAttributes)));
 	}
 
@@ -700,7 +718,46 @@ public class DataPageToolkit {
 		});
 	}
 
+	public static void createChartTooltip(ChartTextCanvas chart, Set<IAttribute<?>> excludedAttributes) {
+		createChartTooltip(chart, () -> new ChartToolTipProvider() {
+			@SuppressWarnings("deprecation")
+			@Override
+			protected Stream<IAttribute<?>> getAttributeStream(IType<IItem> type) {
+				return type.getAttributes().stream().filter(a -> !excludedAttributes.contains(a));
+			}
+		});
+	}
+
 	public static void createChartTooltip(ChartCanvas chart, Supplier<ChartToolTipProvider> toolTipProviderSupplier) {
+		new ToolTip(chart) {
+			String html;
+			Map<String, Image> images;
+
+			@Override
+			protected boolean shouldCreateToolTip(Event event) {
+				ChartToolTipProvider provider = toolTipProviderSupplier.get();
+				chart.infoAt(provider, event.x, event.y);
+				html = provider.getHTML();
+				images = provider.getImages();
+				return html != null;
+			}
+
+			@Override
+			protected Composite createToolTipContentArea(Event event, Composite parent) {
+				FormText formText = CompositeToolkit.createInfoFormText(parent);
+				for (Map.Entry<String, Image> imgEntry : images.entrySet()) {
+					formText.setImage(imgEntry.getKey(), imgEntry.getValue());
+				}
+				formText.setText(html, true, false);
+				return formText;
+			}
+
+		};
+
+	}
+
+	public static void createChartTooltip(
+		ChartTextCanvas chart, Supplier<ChartToolTipProvider> toolTipProviderSupplier) {
 		new ToolTip(chart) {
 			String html;
 			Map<String, Image> images;

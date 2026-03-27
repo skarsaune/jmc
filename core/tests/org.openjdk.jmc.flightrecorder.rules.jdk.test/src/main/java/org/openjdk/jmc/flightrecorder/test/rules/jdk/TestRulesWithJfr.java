@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -224,6 +224,7 @@ public class TestRulesWithJfr {
 			docFactory.setFeature(XML_PARSER_DISALLOW_DOCTYPE_ATTRIBUTE, true);
 			docFactory.setValidating(true);
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+			docBuilder.setErrorHandler(null);
 			Document baselineDoc = docBuilder.parse(file);
 			collection = ReportCollection.fromXml(baselineDoc, reportName);
 		} catch (ParserConfigurationException | SAXException | IOException e) {
@@ -272,7 +273,7 @@ public class TestRulesWithJfr {
 		ResultProvider rp = new ResultProvider();
 		Map<Class<? extends IRule>, Severity> evaluatedRules = new HashMap<>();
 		try {
-			IItemCollection events = JfrLoaderToolkit.loadEvents(jfr.open());
+			IItemCollection events = JfrLoaderToolkit.loadEvents(jfr.open(), true);
 			for (IRule rule : RuleRegistry.getRules()) {
 				if (shouldEvaluate(evaluatedRules, rule)) {
 					try {

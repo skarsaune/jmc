@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -48,7 +48,10 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -132,11 +135,24 @@ public class ActionUiToolkit {
 		ColumnViewerToolTipSupport.enableFor(chartLegend);
 		chartLegend.addCheckStateListener(e -> {
 			IAction action = (IAction) e.getElement();
-			if (action.isEnabled()) {
-				action.setChecked(e.getChecked());
-				action.run();
-			} else {
-				chartLegend.setChecked(action, action.isChecked());
+			setCheckboxAction(chartLegend, action, e.getChecked());
+		});
+		chartLegend.getTable().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.keyCode == SWT.CR) {
+					IStructuredSelection selection = chartLegend.getStructuredSelection();
+					if (!selection.isEmpty()) {
+						Object element = selection.getFirstElement();
+						if (element != null) {
+							IAction action = (IAction) element;
+							boolean isChecked = chartLegend.getChecked(element);
+							chartLegend.setChecked(element, !isChecked);
+							setCheckboxAction(chartLegend, action, chartLegend.getChecked(element));
+						}
+					}
+
+				}
 			}
 		});
 		// FIXME: Add a context menu for enablement, should that be done here or in the caller?
@@ -192,5 +208,14 @@ public class ActionUiToolkit {
 		ToolBarManager tbm = new ToolBarManager(vertical ? SWT.VERTICAL : SWT.HORIZONTAL);
 		actions.forEach(tbm::add);
 		return tbm.createControl(parent);
+	}
+
+	private static void setCheckboxAction(CheckboxTableViewer viewer, IAction action, boolean newState) {
+		if (action.isEnabled()) {
+			action.setChecked(newState);
+			action.run();
+		} else {
+			viewer.setChecked(action, action.isChecked());
+		}
 	}
 }

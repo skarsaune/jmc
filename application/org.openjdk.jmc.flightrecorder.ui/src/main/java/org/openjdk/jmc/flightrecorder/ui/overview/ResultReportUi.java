@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -48,6 +48,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.Browser;
@@ -57,6 +58,8 @@ import org.eclipse.swt.browser.OpenWindowListener;
 import org.eclipse.swt.browser.ProgressAdapter;
 import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.browser.WindowEvent;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.layout.FillLayout;
@@ -64,6 +67,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.openjdk.jmc.common.IState;
 import org.openjdk.jmc.common.IWritableState;
 import org.openjdk.jmc.common.unit.IQuantity;
@@ -79,6 +86,7 @@ import org.openjdk.jmc.flightrecorder.ui.DataPageDescriptor;
 import org.openjdk.jmc.flightrecorder.ui.FlightRecorderUI;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
 import org.openjdk.jmc.flightrecorder.ui.JfrEditor;
+import org.openjdk.jmc.ui.common.util.ThemeUtils;
 import org.openjdk.jmc.ui.misc.DisplayToolkit;
 
 /**
@@ -92,6 +100,8 @@ public class ResultReportUi {
 	private static final String OVERVIEW_UPDATE_PAGE_HEADERS_VISIBILITY = "overview.updatePageHeadersVisibility();"; //$NON-NLS-1$
 	private static final Pattern HTML_ANCHOR_PATTERN = Pattern.compile("<a href=\"(.*?)\">(.*?)</a>"); //$NON-NLS-1$
 	private static final String OPEN_BROWSER_WINDOW = "openWindowByUrl"; //$NON-NLS-1$
+	private static final String STACKTRACE_VIEW_ID = "org.openjdk.jmc.flightrecorder.ui.StacktraceView";
+	private static final String OUTLINE_VIEW_ID = "org.eclipse.ui.views.ContentOutline";
 
 	private static class Linker extends BrowserFunction {
 
@@ -153,7 +163,6 @@ public class ResultReportUi {
 			resultExpandedStates.put(arguments[0].toString(), (Boolean) arguments[1]);
 			return null;
 		}
-
 	}
 
 	public class OpenWindowFunction extends BrowserFunction {
@@ -251,6 +260,18 @@ public class ResultReportUi {
 	private IPageContainer editor;
 	private Collection<HtmlResultGroup> descriptors;
 	private boolean isSinglePage = false;
+
+	private IPropertyChangeListener themeChangeListener = event -> {
+		if (browser != null && !browser.isDisposed() && isLoaded) {
+			DisplayToolkit.safeAsyncExec(() -> {
+				try {
+					browser.execute(String.format("overview.setTheme(%b);", ThemeUtils.isDarkTheme()));
+				} catch (SWTException e) {
+					FlightRecorderUI.getDefault().getLogger().log(Level.WARNING, "Could not update theme", e);
+				}
+			});
+		}
+	};
 
 	private void openBrowserByUrl(final String url, final String title) {
 		final Display display = Display.getDefault();
@@ -368,6 +389,18 @@ public class ResultReportUi {
 			throw new RuntimeException("Document not yet ready"); //$NON-NLS-1$
 		}
 
+		browser.addKeyListener(new KeyListener() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// Do nothing
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				transferFocus(e);
+			}
+		});
+
 		try {
 			for (String cmd = commandQueue.poll(); cmd != null; cmd = commandQueue.poll()) {
 				browser.evaluate(cmd);
@@ -382,12 +415,61 @@ public class ResultReportUi {
 								resultExpandedStates, false);
 				String adjustedHtml = adjustAnchorFollowAction(html);
 				browser.setText(adjustedHtml);
+
+				browser.addKeyListener(new KeyListener() {
+					@Override
+					public void keyReleased(KeyEvent e) {
+						// Do nothing
+					}
+
+					@Override
+					public void keyPressed(KeyEvent e) {
+						transferFocus(e);
+					}
+				});
+
 			} catch (IOException e1) {
 				FlightRecorderUI.getDefault().getLogger().log(Level.WARNING, "Could not update Result Overview", //$NON-NLS-1$
 						e1);
 			}
 		}
 	};
+
+	private void transferFocus(KeyEvent e) {
+		if (e.keyCode == 9) {
+			if ((e.stateMask & SWT.SHIFT) != 0) {
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+								.getActivePage();
+						try {
+							IViewPart outlineView = activePage.showView(OUTLINE_VIEW_ID);
+							if (activePage.getActiveEditor() != null) {
+								outlineView.setFocus();
+							}
+						} catch (PartInitException e) {
+							FlightRecorderUI.getDefault().getLogger().log(Level.INFO, "Failed to set focus", e); //$NON-NLS-1$
+						}
+					}
+				});
+			} else {
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+								.getActivePage();
+						try {
+							IViewPart outlineView = activePage.showView(STACKTRACE_VIEW_ID);
+							if (activePage.getActiveEditor() != null) {
+								outlineView.setFocus();
+							}
+						} catch (PartInitException e) {
+							FlightRecorderUI.getDefault().getLogger().log(Level.INFO, "Failed to set focus", e); //$NON-NLS-1$
+						}
+					}
+				});
+			}
+		}
+	}
 
 	public void updateRule(IRule rule) {
 		// FIXME: Avoid implicit dependency on HTML/javascript template. Generate script in RulesHtmlToolkit instead
@@ -440,16 +522,24 @@ public class ResultReportUi {
 		} catch (NullPointerException npe) {
 			// ignore NPE when there is no state value is available 
 		}
+
+		PlatformUI.getWorkbench().getThemeManager().addPropertyChangeListener(themeChangeListener);
+		browser.addDisposeListener(e -> {
+			PlatformUI.getWorkbench().getThemeManager().removePropertyChangeListener(themeChangeListener);
+		});
+
 		browser.addListener(SWT.MenuDetect, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
 				event.doit = false;
 			}
 		});
+
 		try {
-			String html = isSinglePage ? RulesHtmlToolkit.generateSinglePageHtml(results)
+			boolean isDarkTheme = ThemeUtils.isDarkTheme();
+			String html = isSinglePage ? RulesHtmlToolkit.generateSinglePageHtml(results, isDarkTheme)
 					: RulesHtmlToolkit.generateStructuredHtml(new PageContainerResultProvider(editor), descriptors,
-							resultExpandedStates, false);
+							resultExpandedStates, false, isDarkTheme);
 			String adjustedHtml = adjustAnchorFollowAction(html);
 			browser.setText(adjustedHtml, true);
 			browser.setJavascriptEnabled(true);
@@ -461,6 +551,8 @@ public class ResultReportUi {
 					new Expander(browser, "expander"); //$NON-NLS-1$
 					browser.execute(String.format("overview.showOk(%b);", showOk)); //$NON-NLS-1$
 					browser.execute(String.format("overview.showIgnore(%b);", showIgnore)); //$NON-NLS-1$
+					browser.execute(String.format("overview.setTheme(%b);", isDarkTheme));
+
 					if (isSinglePage) {
 						browser.execute(OVERVIEW_MAKE_SCALABLE);
 					}

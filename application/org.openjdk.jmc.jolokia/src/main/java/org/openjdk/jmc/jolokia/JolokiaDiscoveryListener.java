@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2024, Oracle and/or its affiliates. All rights reserved.
- * Copyright (c) 2024, Kantega AS. All rights reserved.
+ * Copyright (c) 2024, 2025, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2024, 2025, Kantega AS. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -38,9 +38,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jolokia.client.jmxadapter.RemoteJmxAdapter;
 import org.jolokia.service.discovery.JolokiaDiscovery;
-import org.openjdk.jmc.common.jvm.JVMDescriptor;
 import org.openjdk.jmc.jolokia.preferences.PreferenceConstants;
 
 /**
@@ -49,10 +47,13 @@ import org.openjdk.jmc.jolokia.preferences.PreferenceConstants;
  */
 public class JolokiaDiscoveryListener extends AbstractCachedDescriptorProvider implements PreferenceConstants {
 
-	JolokiaDiscoverySettings settings;
+	private JolokiaDiscoverySettings settings;
+	private final JolokiaDiscovery jolokiaDiscovery;
 
 	public JolokiaDiscoveryListener(JolokiaDiscoverySettings settings) {
 		this.settings = settings;
+		jolokiaDiscovery = new JolokiaDiscovery();
+		jolokiaDiscovery.init(this.settings.getJolokiaContext());
 	}
 
 	public JolokiaDiscoveryListener() {
@@ -66,22 +67,13 @@ public class JolokiaDiscoveryListener extends AbstractCachedDescriptorProvider i
 			return found;
 		}
 		try {
-			JolokiaDiscovery jolokiaDiscovery = new JolokiaDiscovery();
-			jolokiaDiscovery.init(this.settings.getJolokiaContext());
 			for (Object object : jolokiaDiscovery.lookupAgentsWithTimeoutAndMulticastAddress(
 					this.settings.getDiscoveryTimeout(), this.settings.getMulticastGroup(),
 					this.settings.getMulticastPort())) {
 				try {
 					@SuppressWarnings("unchecked")
 					Map<String, ?> response = (Map<String, ?>) object;
-					JVMDescriptor jvmInfo;
-					try {// if it is connectable, see if we can get info from connection
-						jvmInfo = JolokiaAgentDescriptor
-								.attemptToGetJvmInfo(new RemoteJmxAdapter(String.valueOf(response.get("url")))); //$NON-NLS-1$
-					} catch (Exception ignore) {
-						jvmInfo = JolokiaAgentDescriptor.NULL_DESCRIPTOR;
-					}
-					JolokiaAgentDescriptor agentDescriptor = new JolokiaAgentDescriptor(response, jvmInfo);
+					JolokiaAgentDescriptor agentDescriptor = new JolokiaAgentDescriptor(response);
 					found.put(agentDescriptor.getGUID(), agentDescriptor);
 
 				} catch (URISyntaxException ignore) {

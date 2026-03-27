@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2019, 2021, Oracle and/or its affiliates. All rights reserved.
- * Copyright (c) 2019, 2021, Datadog, Inc. All rights reserved.
+ * Copyright (c) 2019, 2026, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019, 2026, Datadog, Inc. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -37,6 +37,7 @@ import org.openjdk.jmc.common.IMCFrame;
 import org.openjdk.jmc.common.IMCMethod;
 import org.openjdk.jmc.common.util.FormatToolkit;
 import org.openjdk.jmc.flightrecorder.stacktrace.FrameSeparator;
+import org.openjdk.jmc.flightrecorder.stacktrace.Messages;
 
 /**
  * Frame wrapper taking into account a frame separator for hash code and equals.
@@ -134,5 +135,20 @@ public final class AggregatableFrame implements IMCFrame {
 
 	public String getHumanReadableShortString() {
 		return FormatToolkit.getHumanReadable(getMethod(), false, false, true, false, true, false);
+	}
+
+	/**
+	 * Returns a unique key for this frame based on the fully qualified class name and method name.
+	 * This key can be used for merging frames from different stack traces.
+	 *
+	 * @return a key in the format "fully.qualified.ClassName::methodName", or a sentinel value for
+	 *         special frames (root or unclassifiable frames from truncated stacks)
+	 */
+	public String getMethodKey() {
+		IMCMethod method = frame.getMethod();
+		if (method == null || method.getType() == null) {
+			return Messages.getString(Messages.STACKTRACE_UNCLASSIFIABLE_FRAME);
+		}
+		return method.getType().getFullName() + "::" + method.getMethodName();
 	}
 }

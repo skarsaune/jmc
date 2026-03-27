@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -71,6 +71,7 @@ import org.eclipse.ui.part.Page;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.openjdk.jmc.common.IDescribable;
 import org.openjdk.jmc.common.IDisplayable;
+import org.openjdk.jmc.common.IMCThread;
 import org.openjdk.jmc.common.IState;
 import org.openjdk.jmc.common.collection.IteratorToolkit;
 import org.openjdk.jmc.common.item.Aggregators;
@@ -91,7 +92,10 @@ import org.openjdk.jmc.common.unit.QuantityRange;
 import org.openjdk.jmc.common.unit.RangeContentType;
 import org.openjdk.jmc.common.unit.UnitLookup;
 import org.openjdk.jmc.common.util.TypeHandling;
+import org.openjdk.jmc.common.IMCMethod;
 import org.openjdk.jmc.flightrecorder.JfrAttributes;
+import org.openjdk.jmc.flightrecorder.jdk.JdkAttributes;
+import org.openjdk.jmc.flightrecorder.jdk.JdkFilters;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.ImageConstants;
 import org.openjdk.jmc.flightrecorder.ui.messages.internal.Messages;
@@ -100,6 +104,7 @@ import org.openjdk.jmc.flightrecorder.ui.selection.FlavoredSelectionBase;
 import org.openjdk.jmc.flightrecorder.ui.selection.IFilterFlavor;
 import org.openjdk.jmc.flightrecorder.ui.selection.IFlavoredSelection;
 import org.openjdk.jmc.flightrecorder.ui.selection.IItemStreamFlavor;
+import org.openjdk.jmc.flightrecorder.ui.selection.InViewMethodSelection;
 import org.openjdk.jmc.flightrecorder.ui.selection.IPropertyFlavor;
 import org.openjdk.jmc.flightrecorder.ui.selection.ItemBackedSelection;
 import org.openjdk.jmc.ui.TypeAppearance;
@@ -430,14 +435,19 @@ public class JfrPropertySheet extends Page implements IPropertySheetPage {
 			return limitedDeepToString(((Collection<?>) value).toArray(), JfrPropertySheet::getVerboseString);
 		}
 
-		return TypeHandling.getVerboseString(value);
+		String verboseString = TypeHandling.getVerboseString(value);
+		if (value instanceof IMCThread) {
+			return "(" + NLS.bind(Messages.ThreadsPage_LANE_THREAD_ID_TOOLTIP, ((IMCThread) value).getThreadId()) + ") "
+					+ verboseString;
+		}
+		return verboseString;
 	}
 
 	private TableViewer viewer;
 	private final IPageContainer controller;
 	private CompletableFuture<Void> viewerUpdater;
 
-	JfrPropertySheet(IPageContainer controller) {
+	public JfrPropertySheet(IPageContainer controller) {
 		this.controller = controller;
 	}
 
@@ -498,6 +508,15 @@ public class JfrPropertySheet extends Page implements IPropertySheetPage {
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (selection instanceof InViewMethodSelection) {
+			InViewMethodSelection ms = (InViewMethodSelection) selection;
+			IMCMethod method = ms.getMethod();
+			if (method != null) {
+				var methodFilter = new JdkFilters.MethodFilter(method.getType().getFullName(), method.getMethodName());
+				show(method, ms.getItems().apply(methodFilter));
+			}
+			return;
+		}
 		if (selection instanceof IStructuredSelection) {
 			Object first = ((IStructuredSelection) selection).getFirstElement();
 			IItemCollection items = AdapterUtil.getAdapter(first, IItemCollection.class);
@@ -508,10 +527,24 @@ public class JfrPropertySheet extends Page implements IPropertySheetPage {
 	}
 
 	private void show(IItemCollection items) {
+		showAsync(CompletableFuture.supplyAsync(() -> buildRows(items)));
+	}
+
+	private void show(IMCMethod method, IItemCollection items) {
+		var methodRow = new PropertySheetRow(JdkAttributes.STACK_TRACE_TOP_METHOD, method);
+		showAsync(CompletableFuture.supplyAsync(() -> {
+			PropertySheetRow[] rows = buildRows(items);
+			PropertySheetRow[] result = new PropertySheetRow[rows.length + 1];
+			result[0] = methodRow;
+			System.arraycopy(rows, 0, result, 1, rows.length);
+			return result;
+		}));
+	}
+
+	private void showAsync(CompletableFuture<PropertySheetRow[]> modelBuilder) {
 		if (viewerUpdater != null) {
 			viewerUpdater.complete(null);
 		}
-		CompletableFuture<PropertySheetRow[]> modelBuilder = CompletableFuture.supplyAsync(() -> buildRows(items));
 		viewerUpdater = modelBuilder.thenAcceptAsync(this::setViewerInput, DisplayToolkit.inDisplayThread());
 		viewerUpdater.exceptionally(JfrPropertySheet::handleModelBuildException);
 		DisplayToolkit.safeTimerExec(Display.getCurrent(), 300, this::showCalculationFeedback);

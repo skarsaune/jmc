@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2021, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -74,6 +74,7 @@ public class Messages extends NLS {
 	public static String ConnectionWizardPage_PASSWORD_TOOLTIP;
 	public static String ConnectionWizardPage_PORT_CAPTION;
 	public static String ConnectionWizardPage_PORT_TOOLTIP;
+	public static String ConnectionWizardPage_REQUIRE_SECURE_CONNECTION_LABEL;
 	public static String ConnectionWizardPage_SERVICE_URL_CAPTION;
 	public static String ConnectionWizardPage_SERVICE_URL_TOOLTIP;
 	public static String ConnectionWizardPage_STATUS_CAPTION;

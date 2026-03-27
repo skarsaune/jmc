@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -52,11 +52,41 @@ public class StacktraceFrameSelection extends FlavoredSelectionBase {
 
 	private IMCFrame frame;
 	private IItemCollection selectedItems;
+	private IItemCollection fullItems;
 
 	public StacktraceFrameSelection(IMCFrame frame, IItemCollection selectedItems, String name) {
+		this(frame, selectedItems, null, name);
+	}
+
+	public StacktraceFrameSelection(IMCFrame frame, IItemCollection selectedItems, IItemCollection fullItems,
+			String name) {
 		super(name);
 		this.frame = frame;
 		this.selectedItems = selectedItems;
+		this.fullItems = fullItems;
+	}
+
+	public IMCFrame getFrame() {
+		return frame;
+	}
+
+	public IMCMethod getMethod() {
+		return frame != null ? frame.getMethod() : null;
+	}
+
+	public IItemCollection getSelectedItems() {
+		return selectedItems;
+	}
+
+	/**
+	 * Returns the full/unfiltered item collection from the recording. This can be used by views
+	 * that need to apply their own filters (e.g., to find all events containing a method anywhere
+	 * in the stack trace, not just at the top).
+	 *
+	 * @return the full item collection, or null if not available
+	 */
+	public IItemCollection getFullItems() {
+		return fullItems;
 	}
 
 	@Override

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
 import org.openjdk.jmc.common.IMCFrame;
 import org.openjdk.jmc.common.IMCMethod;
@@ -48,6 +49,7 @@ import org.openjdk.jmc.common.item.IAttribute;
 import org.openjdk.jmc.common.item.IItem;
 import org.openjdk.jmc.common.item.IItemCollection;
 import org.openjdk.jmc.common.item.IItemFilter;
+import org.openjdk.jmc.common.item.ItemCollectionToolkit;
 import org.openjdk.jmc.common.unit.IQuantity;
 import org.openjdk.jmc.common.unit.UnitLookup;
 import org.openjdk.jmc.common.util.IPreferenceValueProvider;
@@ -69,7 +71,6 @@ import org.openjdk.jmc.flightrecorder.rules.util.RulesToolkit.EventAvailability;
 import org.openjdk.jmc.flightrecorder.stacktrace.FrameSeparator;
 import org.openjdk.jmc.flightrecorder.stacktrace.StacktraceFrame;
 import org.openjdk.jmc.flightrecorder.stacktrace.StacktraceModel;
-import org.openjdk.jmc.flightrecorder.stacktrace.StacktraceModel.Branch;
 
 /**
  * Rule that checks how much of the total allocation is caused by possible primitive to object
@@ -194,16 +195,10 @@ public class AutoBoxingRule extends AbstractRule {
 				if (total.compareTo(largestAllocatedByType) > 0) {
 					largestAllocatedByType = total;
 					largestAllocatedType = method.getType();
-					StacktraceFrame secondFrame = null;
-					Branch firstBranch = stacktraceFrame.getBranch();
-					if (firstBranch.getTailFrames().length > 0) {
-						secondFrame = firstBranch.getTailFrames()[0];
-					} else if (firstBranch.getEndFork().getBranchCount() > 0) {
-						secondFrame = firstBranch.getEndFork().getBranch(0).getFirstFrame();
-					}
-					if (secondFrame != null) {
-						secondFrameFromMostAllocated = secondFrame.getFrame();
-					}
+					IItemCollection itemsFromMostAllocate = ItemCollectionToolkit
+							.build(StreamSupport.stream(itemArray.spliterator(), false));
+					secondFrameFromMostAllocated = RulesToolkit.getTopNFramesInMostCommonTrace(itemsFromMostAllocate, 2)
+							.get(1).getFrame();
 				}
 				allocationSizeByType.put(method.getType(), total);
 			}

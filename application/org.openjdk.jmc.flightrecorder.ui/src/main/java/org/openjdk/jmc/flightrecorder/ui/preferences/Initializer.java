@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -68,5 +68,8 @@ public class Initializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceKeys.PROPERTY_OVERVIEW_SHOWOK, PreferenceKeys.PROPERTY_DEFAULT_OVERVIEW_SHOWOK);
 		store.setDefault(PreferenceKeys.PROPERTY_OVERVIEW_SHOWRESULTDETAILS,
 				PreferenceKeys.PROPERTY_DEFAULT_OVERVIEW_SHOWRESULTDETAILS);
+
+		store.setDefault(PreferenceKeys.PROPERTY_STACKTRACE_SHOW_HIDDEN_FRAMES,
+				PreferenceKeys.PROPERTY_DEFAULT_STACKTRACE_SHOW_HIDDEN_FRAMES);
 	}
 }

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -56,6 +56,7 @@ import org.openjdk.jmc.common.IState;
 import org.openjdk.jmc.common.IWritableState;
 import org.openjdk.jmc.common.unit.IQuantity;
 import org.openjdk.jmc.flightrecorder.rules.IResult;
+import org.openjdk.jmc.flightrecorder.rules.ResultToolkit;
 import org.openjdk.jmc.flightrecorder.rules.TypedResult;
 import org.openjdk.jmc.flightrecorder.ui.DataPageDescriptor;
 import org.openjdk.jmc.flightrecorder.ui.IPageContainer;
@@ -222,21 +223,21 @@ class ResultTableUi {
 				new TypedLabelProvider<IResult>(IResult.class) {
 					@Override
 					public String getTextTyped(IResult IResult) {
-						return IResult.getSummary();
+						return ResultToolkit.populateMessage(IResult, IResult.getSummary(), false);
 					}
 				}).build();
 		IColumn explanationColumn = new ColumnBuilder(Messages.ResultOverview_COLUMN_EXPLANATION, "explanation", //$NON-NLS-1$
 				new TypedLabelProvider<IResult>(IResult.class) {
 					@Override
 					public String getTextTyped(IResult IResult) {
-						return IResult.getExplanation();
+						return ResultToolkit.populateMessage(IResult, IResult.getExplanation(), false);
 					}
 				}).build();
 		IColumn solutionColumn = new ColumnBuilder(Messages.ResultOverview_COLUMN_SOLUTION, "solution", //$NON-NLS-1$
 				new TypedLabelProvider<IResult>(IResult.class) {
 					@Override
 					public String getTextTyped(IResult IResult) {
-						return IResult.getSolution();
+						return ResultToolkit.populateMessage(IResult, IResult.getSolution(), false);
 					}
 				}).build();
 		IColumn idColumn = new ColumnBuilder(Messages.ResultOverview_COLUMN_RESULT_ID, "id", //$NON-NLS-1$

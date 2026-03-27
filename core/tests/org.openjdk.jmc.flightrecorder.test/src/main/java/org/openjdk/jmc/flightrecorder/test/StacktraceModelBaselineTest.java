@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2022, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -50,7 +50,7 @@ public class StacktraceModelBaselineTest {
 	public void testAgainstBaseline() throws IOException, CouldNotLoadRecordingException {
 		for (IOResourceSet resourceSet : StacktraceTestToolkit.getTestResources()) {
 			String recordingName = resourceSet.getResource(0).getName();
-			IItemCollection items = RecordingToolkit.getFlightRecording(resourceSet);
+			IItemCollection items = RecordingToolkit.getFlightRecording(resourceSet, true);
 			List<String> parsedEvents = StacktraceTestToolkit.getAggregatedStacktraceLines(items);
 			try {
 				List<String> expectedStacktraces = StacktraceTestToolkit.getStacktracesBaseline(resourceSet);
@@ -64,6 +64,28 @@ public class StacktraceModelBaselineTest {
 				}
 			} catch (Exception e) {
 				Assert.fail(recordingName + ": could not read baseline stack traces: " + e.getMessage());
+			}
+		}
+	}
+
+	@Test
+	public void testAgainstFilteredBaseline() throws IOException, CouldNotLoadRecordingException {
+		for (IOResourceSet resourceSet : StacktraceTestToolkit.getFilteredTestResources()) {
+			String recordingName = resourceSet.getResource(0).getName();
+			IItemCollection items = RecordingToolkit.getFlightRecording(resourceSet, false);
+			List<String> parsedEvents = StacktraceTestToolkit.getAggregatedStacktraceLines(items);
+			try {
+				List<String> expectedStacktraces = StacktraceTestToolkit.getFilteredStacktracesBaseline(resourceSet);
+
+				Assert.assertEquals(recordingName + ": number of stack frame lines did not match expected",
+						expectedStacktraces.size(), parsedEvents.size());
+
+				for (int i = 0; i < expectedStacktraces.size(); i++) {
+					Assert.assertEquals(recordingName + ": stack frame " + i + " did not match expected",
+							expectedStacktraces.get(i), parsedEvents.get(i));
+				}
+			} catch (Exception e) {
+				Assert.fail(recordingName + ": could not read filtered baseline stack traces: " + e.getMessage());
 			}
 		}
 	}

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -35,6 +35,7 @@ package org.openjdk.jmc.test.jemmy.misc.wrappers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jemmy.control.Wrap;
@@ -417,13 +418,21 @@ public class MCText extends MCJemmyBase {
 	 *            the text to set for this text widget
 	 */
 	public void setText(String newText) {
-		SelectionText textField = control.as(SelectionText.class);
-		click();
-		control.keyboard().pushKey(KeyboardButtons.A, SHORTCUT_MODIFIER);
-		control.keyboard().pushKey(KeyboardButtons.DELETE);
-		textField.type(newText);
-		if (isContentAssistPresent()) {
-			control.keyboard().pushKey(KeyboardButtons.ESCAPE);
+		if (isOSX()) {
+			click();
+			Display.getDefault().syncExec(() -> {
+				Text swtText = (Text) control.getControl();
+				swtText.setText(newText);
+			});
+		} else {
+			SelectionText textField = control.as(SelectionText.class);
+			click();
+			control.keyboard().pushKey(KeyboardButtons.A, SHORTCUT_MODIFIER);
+			control.keyboard().pushKey(KeyboardButtons.DELETE);
+			textField.type(newText);
+			if (isContentAssistPresent()) {
+				control.keyboard().pushKey(KeyboardButtons.ESCAPE);
+			}
 		}
 	}
 }

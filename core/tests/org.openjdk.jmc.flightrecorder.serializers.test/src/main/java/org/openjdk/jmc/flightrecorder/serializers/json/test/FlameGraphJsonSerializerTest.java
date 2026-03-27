@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2021, 2022, Oracle and/or its affiliates. All rights reserved.
- * Copyright (c) 2021, Datadog, Inc. All rights reserved.
+ * Copyright (c) 2021, 2025, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, 2025, Datadog, Inc. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -64,8 +64,7 @@ public class FlameGraphJsonSerializerTest {
 
 	@BeforeClass
 	public static void beforeAll() throws IOException, CouldNotLoadRecordingException {
-		IOResourceSet[] testResources = StacktraceTestToolkit.getTestResources();
-		IOResourceSet resourceSet = testResources[0];
+		IOResourceSet resourceSet = StacktraceTestToolkit.getTestResourceByRecordingName("7u40.jfr");
 		testRecording = RecordingToolkit.getFlightRecording(resourceSet);
 	}
 

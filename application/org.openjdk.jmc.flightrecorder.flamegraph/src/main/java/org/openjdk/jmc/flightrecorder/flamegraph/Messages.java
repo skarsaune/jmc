@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2023, Oracle and/or its affiliates. All rights reserved.
- * Copyright (c) 2023, Datadog, Inc. All rights reserved.
+ * Copyright (c) 2023, 2026, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2023, 2026, Datadog, Inc. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -50,6 +50,11 @@ public class Messages {
 	public static final String FLAMEVIEW_PNG_IMAGE = "FLAMEVIEW_PNG_IMAGE"; //$NON-NLS-1$
 	public static final String FLAMEVIEW_TOGGLE_MINIMAP = "FLAMEVIEW_TOGGLE_MINIMAP"; //$NON-NLS-1$
 	public static final String FLAMEVIEW_RESET_ZOOM = "FLAMEVIEW_RESET_ZOOM"; //$NON-NLS-1$
+	public static final String BUTTERFLYVIEW_CALLERS = "BUTTERFLYVIEW_CALLERS"; //$NON-NLS-1$
+	public static final String BUTTERFLYVIEW_CALLEES = "BUTTERFLYVIEW_CALLEES"; //$NON-NLS-1$
+	public static final String BUTTERFLYVIEW_SEARCH = "BUTTERFLYVIEW_SEARCH"; //$NON-NLS-1$
+	public static final String BUTTERFLYVIEW_SELECT_METHOD = "BUTTERFLYVIEW_SELECT_METHOD"; //$NON-NLS-1$
+	public static final String BUTTERFLYVIEW_NO_METHOD_SELECTED = "BUTTERFLYVIEW_NO_METHOD_SELECTED"; //$NON-NLS-1$
 
 	private Messages() {
 	}

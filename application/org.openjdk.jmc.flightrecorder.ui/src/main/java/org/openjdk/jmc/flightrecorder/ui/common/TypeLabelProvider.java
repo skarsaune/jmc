@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -141,6 +141,8 @@ public class TypeLabelProvider {
 			return new Color(0x000096);
 		case JdkTypeIDs.THREAD_DUMP:
 			return new Color(0xFFA800);
+		case JdkTypeIDs.TENURING_DISTRIBUTION:
+			return new Color(0x4682B4);
 		default:
 			// "http://www.oracle.com/hotspot/jvm/vm/gc/collector/old_garbage_collection" -> new Color(0x800000);
 			// "http://www.oracle.com/hotspot/jvm/vm/gc/collector/young_garbage_collection" -> new Color(0xFF8080);

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2022, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -141,23 +141,6 @@ public final class FlightRecorderUI extends MCAbstractUIPlugin {
 		} catch (QuantityConversionException e) {
 			return PreferenceKeys.DEFAULT_ITEM_LIST_SIZE;
 		}
-	}
-
-	public static int parseWebsocketPort(String port) {
-		try {
-			return Integer.parseInt(port);
-		} catch (NumberFormatException e) {
-			return PreferenceKeys.DEFAULT_WEBSOCKET_PORT;
-		}
-	}
-
-	public int getWebsocketPort() {
-		return parseWebsocketPort(getPreferenceStore().getString(PreferenceKeys.PROPERTY_WEBSOCKET_SERVER_PORT));
-	}
-
-	public boolean isWebsocketServerEnabled() {
-		int port = getWebsocketPort();
-		return port > 0 && port < 65535;
 	}
 
 	public static String validateDumpTimespan(String text) {

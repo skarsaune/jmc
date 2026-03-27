@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -68,8 +68,21 @@ public class Messages extends NLS {
 	public static String ChartComposite_SHOW_LAST_HOUR;
 	public static String ChartComposite_SHOW_LAST_MINUTE;
 	public static String ChartComposite_SHOW_LAST_WEEK;
+	public static String ChartComposite_SHOW_ALL;
+	public static String ChartComposite_SHOW_CUSTOM_LAST;
+	public static String ChartComposite_SHOW_CUSTOM_RANGE;
 	public static String ChartComposite_SHOW_MENU_TEXT;
 	public static String ChartComposite_X_AXIS_TITLE;
+	public static String CustomTimeInputDialog_TITLE;
+	public static String CustomTimeInputDialog_MESSAGE;
+	public static String CustomTimeInputDialog_TIME_FIELD_LABEL;
+	public static String CustomTimeInputDialog_ERROR_INVALID_FORMAT;
+	public static String CustomTimeInputDialog_ERROR_INVALID_VALUE;
+	public static String CustomTimeRangeDialog_TITLE;
+	public static String CustomTimeRangeDialog_MESSAGE;
+	public static String CustomTimeRangeDialog_FROM_FIELD_LABEL;
+	public static String CustomTimeRangeDialog_TO_FIELD_LABEL;
+	public static String CustomTimeRangeDialog_ERROR_FROM_AFTER_TO;
 	public static String TICK_DENSITY_NAME_DENSE;
 	public static String TICK_DENSITY_NAME_NORMAL;
 	public static String TICK_DENSITY_NAME_SPARSE;

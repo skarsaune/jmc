@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jolokia plugin test
 Bundle-SymbolicName: org.openjdk.jmc.jolokia.test;singleton:=true
-Bundle-Version: 9.1.0.qualifier
+Bundle-Version: 10.0.0.qualifier
 Bundle-Vendor: Oracle Corporation
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.junit,
  org.openjdk.jmc.jolokia,
@@ -16,3 +16,6 @@ Require-Bundle: org.junit,
  org.hamcrest,
  org.osgi.service.servlet;bundle-version="2.0.0"
 Automatic-Module-Name: org.openjdk.jmc.jolokia.test
+Import-Package: org.jolokia.server.core.config;version="2.5.1",
+ org.jolokia.server.core.service.api;version="2.5.1",
+ org.jolokia.service.discovery;version="2.5.1"

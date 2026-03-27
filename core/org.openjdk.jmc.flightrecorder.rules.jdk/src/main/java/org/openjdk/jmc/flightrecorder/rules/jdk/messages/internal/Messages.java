@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -231,12 +231,17 @@ public class Messages {
 	public static final String ErrorRule_TEXT_WARN = "ErrorRule_TEXT_WARN"; //$NON-NLS-1$
 	public static final String ErrorRule_TEXT_WARN_EXCLUDED_INFO = "ErrorRule_TEXT_WARN_EXCLUDED_INFO"; //$NON-NLS-1$
 	public static final String ErrorRule_TEXT_WARN_LONG = "ErrorRule_TEXT_WARN_LONG"; //$NON-NLS-1$
+	public static final String ErrorRule_TEXT_WARN_MOST_COMMON_ERROR_MESSAGE = "ErrorRule_TEXT_WARN_MOST_COMMON_ERROR_MESSAGE"; //$NON-NLS-1$
+	public static final String ErrorRule_TEXT_WARN_MOST_COMMON_ERROR_STACKTRACE = "ErrorRule_TEXT_WARN_MOST_COMMON_ERROR_STACKTRACE"; //$NON-NLS-1$
 	public static final String ExceptionRule_CONFIG_INFO_LIMIT = "ExceptionRule_CONFIG_INFO_LIMIT"; //$NON-NLS-1$
 	public static final String ExceptionRule_CONFIG_INFO_LIMIT_LONG = "ExceptionRule_CONFIG_INFO_LIMIT_LONG"; //$NON-NLS-1$
 	public static final String ExceptionRule_CONFIG_WARN_LIMIT = "ExceptionRule_CONFIG_WARN_LIMIT"; //$NON-NLS-1$
 	public static final String ExceptionRule_CONFIG_WARN_LIMIT_LONG = "ExceptionRule_CONFIG_WARN_LIMIT_LONG"; //$NON-NLS-1$
 	public static final String ExceptionRule_RULE_NAME = "ExceptionRule_RULE_NAME"; //$NON-NLS-1$
 	public static final String ExceptionRule_TEXT_INFO_LONG = "ExceptionRule_TEXT_INFO_LONG"; //$NON-NLS-1$
+	public static final String ExceptionRule_TEXT_MOST_COMMON_EXCEPTION = "ExceptionRule_TEXT_MOST_COMMON_EXCEPTION"; //$NON-NLS-1$
+	public static final String ExceptionRule_TEXT_MOST_COMMON_EXCEPTION_MESSAGE = "ExceptionRule_TEXT_MOST_COMMON_EXCEPTION_MESSAGE"; //$NON-NLS-1$
+	public static final String ExceptionRule_TEXT_MOST_COMMON_EXCEPTION_STACKTRACE = "ExceptionRule_TEXT_MOST_COMMON_EXCEPTION_STACKTRACE"; //$NON-NLS-1$
 	public static final String ExceptionRule_TEXT_MESSAGE = "ExceptionRule_TEXT_MESSAGE"; //$NON-NLS-1$
 	public static final String FatalErrorRule_RULE_NAME = "FatalErrorRule_RULE_NAME"; //$NON-NLS-1$
 	public static final String FatalErrorRule_TEXT_OK = "FatalErrorRule_TEXT_OK"; //$NON-NLS-1$
@@ -319,6 +324,13 @@ public class Messages {
 	public static final String GcFreedRatioRule_RESULT_OK = "GcFreedRatioRule_RESULT_OK"; //$NON-NLS-1$
 	public static final String GcFreedRatioRule_RESULT_SHORT_DESCRIPTION = "GcFreedRatioRule_RESULT_SHORT_DESCRIPTION"; //$NON-NLS-1$
 	public static final String GarbageCollectionInfo_RULE_NAME = "GarbageCollectionInfo_RULE_NAME"; //$NON-NLS-1$
+	public static final String ZGCAllocationStall_RULE_NAME = "ZGCAllocationStall_RULE_NAME"; //$NON-NLS-1$
+	public static final String ZGCAllocationStallRule_CONFIG_INFO_LIMIT = "ZGCAllocationStallRule_CONFIG_INFO_LIMIT"; //$NON-NLS-1$
+	public static final String ZGCAllocationStallRule_CONFIG_INFO_LIMIT_LONG = "ZGCAllocationStallRule_CONFIG_INFO_LIMIT_LONG"; //$NON-NLS-1$
+	public static final String ZGCAllocationStallRule_RATE = "ZGCAllocationStallRule_RATE"; //$NON-NLS-1$
+	public static final String ZGCAllocationStallRule_RATE_LONG = "ZGCAllocationStallRule_RATE_LONG"; //$NON-NLS-1$
+	public static final String ZGCAllocationStallRule_CONFIG_WARN_LIMIT = "ZGCAllocationStallRule_CONFIG_WARN_LIMIT"; //$NON-NLS-1$
+	public static final String ZGCAllocationStallRule_CONFIG_WARN_LIMIT_LONG = "ZGCAllocationStallRule_CONFIG_WARN_LIMIT_LONG"; //$NON-NLS-1$
 	public static final String GcFreedRatioRule_RULE_NAME = "GcFreedRatioRule_RULE_NAME"; //$NON-NLS-1$
 	public static final String GcFreedRatioRule_WINDOW_SIZE = "GcFreedRatioRule_WINDOW_SIZE"; //$NON-NLS-1$
 	public static final String GcFreedRatioRule_WINDOW_SIZE_DESC = "GcFreedRatioRule_WINDOW_SIZE_DESC"; //$NON-NLS-1$
@@ -476,6 +488,9 @@ public class Messages {
 	public static final String ManyRunningProcessesRule_TEXT_RECOMMENDATION = "ManyRunningProcessesRule_TEXT_RECOMMENDATION"; //$NON-NLS-1$
 	public static final String MetaspaceOomRuleFactory_RULE_NAME = "MetaspaceOomRuleFactory_RULE_NAME"; //$NON-NLS-1$
 	public static final String MetaspaceOomRuleFactory_TEXT_OK = "MetaspaceOomRuleFactory_TEXT_OK"; //$NON-NLS-1$
+	public static final String MetaspaceOomRuleFactory_TEXT_CAUSE = "MetaspaceOomRuleFactory_TEXT_CAUSE"; //$NON-NLS-1$	
+	public static final String MetaspaceOomRuleFactory_TEXT_SET_ACTION = "MetaspaceOomRuleFactory_TEXT_SET_ACTION"; //$NON-NLS-1$
+	public static final String MetaspaceOomRuleFactory_TEXT_INCREASE_ACTION = "MetaspaceOomRuleFactory_TEXT_INCREASE_ACTION"; //$NON-NLS-1$
 	public static final String MetaspaceOomRuleFactory_TEXT_WARN = "MetaspaceOomRuleFactory_TEXT_WARN"; //$NON-NLS-1$
 	public static final String MetaspaceOomRuleFactory_TEXT_WARN_LONG = "MetaspaceOomRuleFactory_TEXT_WARN_LONG"; //$NON-NLS-1$
 	public static final String MethodProfilingDataProvider_AGGR_AGGR_TOP_FRAME_QUOTA = "MethodProfilingDataProvider_AGGR_AGGR_TOP_FRAME_QUOTA"; //$NON-NLS-1$
@@ -500,6 +515,9 @@ public class Messages {
 	public static final String MultipleAgentsRule_NATIVE_WARNING_LIMIT_LONG = "MultipleAgentsRule_NATIVE_WARNING_LIMIT_LONG"; //$NON-NLS-1$;
 	public static final String NumberOfGcThreadsRuleFactory_TEXT_INFO = "NumberOfGcThreadsRuleFactory_TEXT_INFO"; //$NON-NLS-1$
 	public static final String NumberOfGcThreadsRuleFactory_TEXT_INFO_LONG = "NumberOfGcThreadsRuleFactory_TEXT_INFO_LONG"; //$NON-NLS-1$
+	public static final String ZGCAllocationStall_TEXT_INFO = "ZGCAllocationStall_TEXT_INFO"; //$NON-NLS-1$
+	public static final String ZGCAllocationStall_TEXT_WARN = "ZGCAllocationStall_TEXT_WARN"; //$NON-NLS-1$
+	public static final String ZGCAllocationStall_TEXT_OK = "ZGCAllocationStall_TEXT_OK"; //$NON-NLS-1$
 	public static final String ObjectStatisticsDataProvider_AGGR_LIVE_SIZE_INCREASE = "ObjectStatisticsDataProvider_AGGR_LIVE_SIZE_INCREASE"; //$NON-NLS-1$
 	public static final String ObjectStatisticsDataProvider_AGGR_LIVE_SIZE_INCREASE_DESC = "ObjectStatisticsDataProvider_AGGR_LIVE_SIZE_INCREASE_DESC"; //$NON-NLS-1$
 	public static final String ObjectStatisticsDataProvider_AGGR_LIVE_INSTANCES_INCREASE = "ObjectStatisticsDataProvider_AGGR_LIVE_INSTANCES_INCREASE"; //$NON-NLS-1$
@@ -647,12 +665,19 @@ public class Messages {
 	public static final String VMOperationRule_CONFIG_WARNING_LIMIT = "VMOperationRule_CONFIG_WARNING_LIMIT"; //$NON-NLS-1$
 	public static final String VMOperationRule_CONFIG_WARNING_LIMIT_LONG = "VMOperationRule_CONFIG_WARNING_LIMIT_LONG"; //$NON-NLS-1$
 	public static final String VMOperations_RULE_NAME = "VMOperations_RULE_NAME"; //$NON-NLS-1$
+	public static final String VMOperations_Duration_Operation = "VMOperations_Duration_Operation"; //$NON-NLS-1$
 	public static final String VerifyNoneRule_RULE_NAME = "VerifyNoneRule_RULE_NAME"; //$NON-NLS-1$
 	public static final String VerifyNoneRule_TEXT_INFO = "VerifyNoneRule_TEXT_INFO"; //$NON-NLS-1$
 	public static final String VerifyNoneRule_TEXT_INFO_LONG = "VerifyNoneRule_TEXT_INFO_LONG"; //$NON-NLS-1$
 	public static final String VerifyNoneRule_TEXT_OK = "VerifyNoneRule_TEXT_OK"; //$NON-NLS-1$
 	public static final String VerifyNoneRule_WLS_TEXT_INFO = "VerifyNoneRule_WLS_TEXT_INFO"; //$NON-NLS-1$
 	public static final String VerifyNoneRule_WLS_TEXT_INFO_LONG = "VerifyNoneRule_WLS_TEXT_INFO_LONG"; //$NON-NLS-1$
+	public static final String PID1Rule_RULE_NAME = "PID1Rule_RULE_NAME"; //$NON-NLS-1$
+	public static final String PID1Rule_TEXT_OK = "PID1Rule_TEXT_OK"; //$NON-NLS-1$
+	public static final String PID1Rule_TEXT_INFO_LONG = "PID1Rule_TEXT_INFO_LONG"; //$NON-NLS-1$
+	public static final String PID1Rule_TEXT_INFO = "PID1Rule_TEXT_INFO"; //$NON-NLS-1$
+	public static final String PID1Rule_TEXT_SOLUTION = "PID1Rule_TEXT_SOLUTION"; //$NON-NLS-1$
+	public static final String PID1Rule_NO_PID = "PID1Rule_NO_PID"; //$NON-NLS-1$
 
 	private Messages() {
 	}

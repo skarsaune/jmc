@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -38,6 +38,7 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.RuntimeMXBean;
 import java.lang.management.ThreadMXBean;
+import java.lang.ref.Cleaner;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.net.MalformedURLException;
 import java.util.List;
@@ -64,7 +65,11 @@ import org.openjdk.jmc.rjmx.common.services.jfr.internal.HotspotManagementToolki
  */
 public final class ConnectionToolkit {
 	/**
-	 * The default port JMX
+	 * Shared cleaner instance for RJMX resource management.
+	 */
+	public static final Cleaner CLEANER = Cleaner.create();
+	/**
+	 * The default port.
 	 */
 	public static final int VALUE_DEFAULT_REMOTE_PORT_JMX = 7091;
 	/**

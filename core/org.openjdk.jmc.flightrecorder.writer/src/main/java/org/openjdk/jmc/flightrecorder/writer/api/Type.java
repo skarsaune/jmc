@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.
- * Copyright (c) 2021, Datadog, Inc. All rights reserved.
+ * Copyright (c) 2021, 2025, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, 2025, Datadog, Inc. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -201,6 +201,34 @@ public interface Type extends NamedType {
 	TypedValue asValue(Object value);
 
 	/**
+	 * Creates a typed null value for this type.
+	 * <p>
+	 * Use this method when you need to pass a null value for optional or missing complex-type
+	 * fields. Passing {@code null} directly to
+	 * {@link TypedValueBuilder#putField(String, TypedValue)} causes compilation ambiguity because
+	 * the method is overloaded with multiple parameter types.
+	 * <p>
+	 * For primitive types (int, long, String, etc.), you can pass primitive default/null values
+	 * directly. For complex types (Thread, StackTrace, custom types), use this method to create a
+	 * properly typed null value.
+	 * <p>
+	 * <strong>Example:</strong>
+	 *
+	 * <pre>
+	 * {
+	 * 	&#64;code
+	 * 	Types types = recording.getTypes();
+	 * 	Type stackTraceType = types.getType(Types.JDK.STACK_TRACE);
+	 * 	Type threadType = types.getType(Types.JDK.THREAD);
+	 *
+	 * 	Type eventType = recording.registerEventType("custom.Event");
+	 * 	recording.writeEvent(eventType.asValue(builder -> {
+	 * 		builder.putField("startTime", System.nanoTime()).putField("stackTrace", stackTraceType.nullValue()) // typed null
+	 * 				.putField("eventThread", threadType.nullValue()); // typed null
+	 * 	}));
+	 * }
+	 * </pre>
+	 *
 	 * @return a specific {@linkplain TypedValue} instance designated as the {@literal null} value
 	 *         for this type
 	 */

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -53,6 +53,7 @@ public class ConnectionDescriptorBuilder {
 	private String password;
 	private int port = DEFAULT_PORT;
 	private ICredentials credentials;
+	private boolean requireSecureConnection;
 
 	/**
 	 * Port number designator meaning that the default port for the selected protocol should be
@@ -143,6 +144,16 @@ public class ConnectionDescriptorBuilder {
 	}
 
 	/**
+	 * @param requireSecureConnection
+	 *            force connection to use TLS. Fail if not possible.
+	 * @return the Builder currently being configured.
+	 */
+	public ConnectionDescriptorBuilder requireSecureConnection(boolean requireSecureConnection) {
+		this.requireSecureConnection = requireSecureConnection;
+		return this;
+	}
+
+	/**
 	 * Builds the {@link IConnectionDescriptor}.
 	 *
 	 * @return a freshly created {@link IConnectionDescriptor} initialized as per the builder
@@ -169,6 +180,6 @@ public class ConnectionDescriptorBuilder {
 			}
 		}
 
-		return new JMXConnectionDescriptor(url, credentials);
+		return new JMXConnectionDescriptor(url, credentials, requireSecureConnection);
 	}
 }

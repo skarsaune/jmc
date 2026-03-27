@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -96,6 +96,8 @@ import static org.openjdk.jmc.flightrecorder.jdk.JdkTypeIDs.SOCKET_READ;
 import static org.openjdk.jmc.flightrecorder.jdk.JdkTypeIDs.SOCKET_WRITE;
 import static org.openjdk.jmc.flightrecorder.jdk.JdkTypeIDs.ULONG_FLAG;
 import static org.openjdk.jmc.flightrecorder.jdk.JdkTypeIDs.VM_INFO;
+import static org.openjdk.jmc.flightrecorder.jdk.JdkTypeIDs.ZGC_ALLOCATION_STALL;
+import static org.openjdk.jmc.flightrecorder.jdk.JdkTypeIDs.VIRTUALIZATION_INFORMATION;
 
 import java.text.MessageFormat;
 
@@ -138,6 +140,8 @@ public final class JdkAggregators {
 	public static final IAggregator<String, ?> CPU_DESCRIPTION = distinctAsString(CPU_INFORMATION,
 			JdkAttributes.CPU_DESCRIPTION);
 	public static final IAggregator<String, ?> CPU_TYPE = distinctAsString(CPU_INFORMATION, JdkAttributes.CPU_TYPE);
+	public static final IAggregator<String, ?> VIRTUALIZATION_NAME = distinctAsString(VIRTUALIZATION_INFORMATION,
+			JdkAttributes.VIRTUALIZATION_NAME);
 	// OS info
 	public static final IAggregator<String, ?> OS_VERSION = distinctAsString(OS_INFORMATION, JdkAttributes.OS_VERSION);
 	public static final IAggregator<IQuantity, ?> MAX_USED_MEMORY = max(
@@ -159,6 +163,14 @@ public final class JdkAggregators {
 			JdkAttributes.HEAP_USE_COMPRESSED_OOPS);
 	public static final IAggregator<String, ?> COMPRESSED_OOPS_MODE = distinctAsString(HEAP_CONF,
 			JdkAttributes.HEAP_COMPRESSED_OOPS_MODE);
+	//ZGC
+	public static final IAggregator<IQuantity, ?> ZGC_ALLOCATION_STALL_COUNT = Aggregators.count(
+			Messages.getString(Messages.AGGR_ZGC_ALLOCATION_STALL_COUNT),
+			Messages.getString(Messages.AGGR_ZGC_ALLOCATION_STALL_COUNT_DESC), JdkFilters.ZGC_ALLOCATION_STALL);
+	public static final IAggregator<IQuantity, ?> LONGEST_ZGC_ALLOCATION_STALL = Aggregators.max(ZGC_ALLOCATION_STALL,
+			DURATION);
+	public static final IAggregator<IQuantity, ?> TOTAL_ZGC_ALLOCATION_STALL = Aggregators.sum(ZGC_ALLOCATION_STALL,
+			DURATION);
 	// GC config
 	public static final IAggregator<String, ?> OLD_COLLECTOR = distinctAsString(GC_CONF, JdkAttributes.OLD_COLLECTOR);
 	public static final IAggregator<String, ?> YOUNG_COLLECTOR = distinctAsString(GC_CONF,
@@ -236,6 +248,9 @@ public final class JdkAggregators {
 	public static final IAggregator<IQuantity, ?> LARGEST_MAX_HEAP_SIZE_FROM_FLAG = filter(
 			Messages.getString(Messages.AGGR_LARGEST_MAX_HEAP_SIZE_FROM_FLAG), null, max(ULONG_FLAG, FLAG_VALUE_NUMBER),
 			ItemFilters.equals(FLAG_NAME, "MaxHeapSize")); //$NON-NLS-1$
+	public static final IAggregator<IQuantity, ?> LARGEST_MAX_METASPACE_SIZE_FROM_FLAG = filter(
+			Messages.getString(Messages.AGGR_LARGEST_MAX_METASPACE_SIZE_FROM_FLAG), null,
+			max(ULONG_FLAG, FLAG_VALUE_NUMBER), ItemFilters.equals(FLAG_NAME, "MaxMetaspaceSize")); //$NON-NLS-1$
 	public static final IAggregator<IQuantity, ?> OUTSIDE_TLAB_COUNT = Aggregators.count(
 			Messages.getString(Messages.AGGR_OUTSIDE_TLAB_COUNT),
 			Messages.getString(Messages.AGGR_OUTSIDE_TLAB_COUNT_DESC), ALLOC_OUTSIDE_TLAB);
@@ -508,6 +523,11 @@ public final class JdkAggregators {
 			JdkAttributes.BASE_ADDRESS);
 	public static final IAggregator<?, ?> TOP_ADDRESS = Aggregators.min(JdkTypeIDs.NATIVE_LIBRARY,
 			JdkAttributes.TOP_ADDRESS);
+
+	public static final IAggregator<IQuantity, ?> TENURING_AGE_SIZE = Aggregators.sum(
+			Messages.getString(Messages.AGGR_TENURING_AGE_SIZE),
+			Messages.getString(Messages.AGGR_TENURING_AGE_SIZE_DESC), JdkTypeIDs.TENURING_DISTRIBUTION,
+			JdkAttributes.TENURING_DISTRIBUTION_SIZE);
 
 	/**
 	 * Aggregator for getting the first value, ie. the value from the event with the first occurring

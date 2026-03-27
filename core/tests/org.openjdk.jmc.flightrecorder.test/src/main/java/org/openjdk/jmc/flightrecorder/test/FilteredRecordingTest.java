@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2022, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -95,7 +95,7 @@ public class FilteredRecordingTest {
 			try (InputStream recordingStream = resourceSet.getResource(0).open()) {
 				List<IParserExtension> extensions = new ArrayList<>(ParserExtensionRegistry.getParserExtensions());
 				extensions.add(new FilterExtension(onLoadFilter));
-				IItemCollection items = JfrLoaderToolkit.loadEvents(recordingStream, extensions);
+				IItemCollection items = JfrLoaderToolkit.loadEvents(recordingStream, extensions, true);
 				Assert.assertTrue("Expected some events to pass through the filter", items.hasItems());
 				for (IItemIterable ii : items) {
 					if (expect != ii.getType().getIdentifier().equals(typeToCheck)) {

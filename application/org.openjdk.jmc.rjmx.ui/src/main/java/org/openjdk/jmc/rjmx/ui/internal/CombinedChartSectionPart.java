@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -55,6 +55,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -93,18 +95,21 @@ import org.openjdk.jmc.rjmx.common.subscription.MRI;
 import org.openjdk.jmc.rjmx.subscription.MRIMetadataToolkit;
 import org.openjdk.jmc.rjmx.ui.attributes.EditDisplayNameAction;
 import org.openjdk.jmc.ui.UIPlugin;
+import org.openjdk.jmc.ui.common.util.ThemeUtils;
 import org.openjdk.jmc.ui.handlers.InFocusHandlerActivator;
 import org.openjdk.jmc.ui.handlers.MCContextMenuManager;
 import org.openjdk.jmc.ui.misc.MCArrayContentProvider;
 import org.openjdk.jmc.ui.misc.MCLayoutFactory;
 import org.openjdk.jmc.ui.misc.MCSectionPart;
 import org.openjdk.jmc.ui.misc.MCToolBarManager;
+import org.openjdk.jmc.ui.misc.PatternFly.Palette;
 import org.openjdk.jmc.ui.misc.SWTColorToolkit;
 import org.openjdk.jmc.ui.rate.RateCoordinator;
 import org.openjdk.jmc.ui.rate.RateLimitedObserver;
 import org.openjdk.jmc.ui.rate.RefreshController;
 
 import org.openjdk.jmc.greychart.DefaultMetadataProvider;
+import org.openjdk.jmc.greychart.YAxis;
 import org.openjdk.jmc.greychart.data.RenderingMode;
 import org.openjdk.jmc.greychart.data.SeriesProviderSet;
 
@@ -239,6 +244,14 @@ public class CombinedChartSectionPart extends MCSectionPart implements IAttribut
 				tableState);
 		m_statisticsTable.getViewer().setInput(statisticsProvider);
 		chart = new ChartComposite(chartContainer, SWT.NONE, createEnableUpdatesCallback());
+
+		boolean isDarkTheme = ThemeUtils.isDarkTheme();
+		chart.getChart().setBackground(isDarkTheme ? Palette.PF_BLACK_900.getAWTColor() : Color.WHITE);
+		Color axisForeground = isDarkTheme ? Color.WHITE : Color.BLACK;
+		chart.getChart().getXAxis().setForeground(axisForeground);
+		for (YAxis yAxis : chart.getChart().getYAxis()) {
+			yAxis.setForeground(axisForeground);
+		}
 		chart.setChartSampleTooltipProvider(new ChartSampleTooltipProvider() {
 			@Override
 			public String getTooltip(DataSeries<?> series, double value) {
@@ -523,12 +536,7 @@ public class CombinedChartSectionPart extends MCSectionPart implements IAttribut
 			public void checkStateChanged(CheckStateChangedEvent event) {
 				MRI mri = (MRI) event.getElement();
 				boolean enable = event.getChecked();
-				setEnabled(mri, enable);
-				if (enable) {
-					setQuantityKindFromAttribute(mri);
-				}
-				refreshAll();
-
+				updateLegendCheckedState(mri, enable);
 			}
 
 		});
@@ -549,7 +557,23 @@ public class CombinedChartSectionPart extends MCSectionPart implements IAttribut
 		legend.setLabelProvider(new AttributeLabelProvider(mds, mris));
 		legend.setInput(this);
 		ColumnViewerToolTipSupport.enableFor(legend);
-
+		legend.getTable().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.keyCode == SWT.CR) {
+					IStructuredSelection selection = legend.getStructuredSelection();
+					if (!selection.isEmpty()) {
+						Object element = selection.getFirstElement();
+						if (element != null) {
+							MRI mri = (MRI) element;
+							boolean isChecked = legend.getChecked(element);
+							legend.setChecked(element, !isChecked);
+							updateLegendCheckedState(mri, legend.getChecked(element));
+						}
+					}
+				}
+			}
+		});
 		GridData gd2 = new GridData(SWT.FILL, SWT.FILL, false, true);
 		gd2.heightHint = 60;
 		gd2.widthHint = 210;
@@ -606,4 +630,11 @@ public class CombinedChartSectionPart extends MCSectionPart implements IAttribut
 		}
 	}
 
+	private void updateLegendCheckedState(MRI mri, boolean enable) {
+		setEnabled(mri, enable);
+		if (enable) {
+			setQuantityKindFromAttribute(mri);
+		}
+		refreshAll();
+	}
 }

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2021, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -73,6 +73,9 @@ public class PreferenceKeys {
 	public static final boolean PROPERTY_DEFAULT_OVERVIEW_SHOWOK = false;
 	public static final String PROPERTY_OVERVIEW_SHOWRESULTDETAILS = "flightrecorder.overview.showresultdetails"; //$NON-NLS-1$
 	public static final boolean PROPERTY_DEFAULT_OVERVIEW_SHOWRESULTDETAILS = true;
+
+	public static final String PROPERTY_STACKTRACE_SHOW_HIDDEN_FRAMES = "flightrecorder.stacktrace.showHiddenFrames"; //$NON-NLS-1$
+	public static final boolean PROPERTY_DEFAULT_STACKTRACE_SHOW_HIDDEN_FRAMES = false;
 
 	private static IQuantity getDefaultNumberOfEvaluationThreads() {
 		int threadsHint = Runtime.getRuntime().availableProcessors() / 2;

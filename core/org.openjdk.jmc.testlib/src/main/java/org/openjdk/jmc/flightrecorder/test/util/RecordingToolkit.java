@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2022, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +47,6 @@ import org.openjdk.jmc.common.item.IItemCollection;
 import org.openjdk.jmc.flightrecorder.CouldNotLoadRecordingException;
 import org.openjdk.jmc.flightrecorder.JfrLoaderToolkit;
 import org.openjdk.jmc.flightrecorder.parser.IParserExtension;
-import org.openjdk.jmc.flightrecorder.parser.ParserExtensionRegistry;
 import org.openjdk.jmc.test.TestToolkit;
 import org.openjdk.jmc.test.io.IOResource;
 import org.openjdk.jmc.test.io.IOResourceSet;
@@ -74,6 +72,20 @@ public class RecordingToolkit {
 		return TestToolkit.getResourcesInDirectory(RecordingToolkit.class, RECORDINGS_DIRECTORY, RECORDINGS_INDEXFILE);
 	}
 
+	public static TestToolkit.IndexedResources getRecordingsWithExclusions() throws IOException {
+		return TestToolkit.getResourcesInDirectoryWithExclusions(RecordingToolkit.class, RECORDINGS_DIRECTORY,
+				RECORDINGS_INDEXFILE);
+	}
+
+	/**
+	 * Will load the named recording no matter if it was excluded from the test resources or not.
+	 * This is, for example, good for tests using special recordings that are created for a special
+	 * purpose to show a certain edge case.
+	 * 
+	 * @param recordingName
+	 *            the name of the recording to load
+	 * @return an {@link IItemCollection} for the recording.
+	 */
 	public static IItemCollection getNamedRecording(String recordingName)
 			throws IOException, CouldNotLoadRecordingException {
 		return getFlightRecording(
@@ -89,12 +101,12 @@ public class RecordingToolkit {
 		return getFlightRecording(resourceSet.getResource(0));
 	}
 
-	public static IItemCollection getFlightRecording(IOResource resource)
+	public static IItemCollection getFlightRecording(IOResourceSet resourceSet, boolean showHiddenFrames)
 			throws IOException, CouldNotLoadRecordingException {
-		return getFlightRecording(resource, ParserExtensionRegistry.getParserExtensions());
+		return getFlightRecording(resourceSet.getResource(0), showHiddenFrames);
 	}
 
-	public static IItemCollection getFlightRecording(IOResource resource, List<IParserExtension> extensions)
+	public static IItemCollection getFlightRecording(IOResource resource, boolean showHiddenFrames)
 			throws IOException, CouldNotLoadRecordingException {
 		File tmpRecording = createResultFile("recordingTest", "tmp_recording", true);
 		InputStream is = resource.open();
@@ -106,7 +118,19 @@ public class RecordingToolkit {
 		}
 		IOToolkit.closeSilently(os);
 		IOToolkit.closeSilently(is);
-		return JfrLoaderToolkit.loadEvents(Arrays.asList(tmpRecording), extensions);
+		return JfrLoaderToolkit.loadEvents(tmpRecording, showHiddenFrames);
+	}
+
+	public static IItemCollection getFlightRecording(IOResource resource)
+			throws IOException, CouldNotLoadRecordingException {
+		// This method maintains the old default (showing hidden frames)
+		return getFlightRecording(resource, true);
+	}
+
+	public static IItemCollection getFlightRecording(IOResource resource, List<IParserExtension> extensions)
+			throws IOException, CouldNotLoadRecordingException {
+		// This method maintains the old default (showing hidden frames)
+		return getFlightRecording(resource, true);
 	}
 
 	public static List<String> getStats(IOResourceSet resourceSet) throws IOException {

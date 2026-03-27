@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Name: Flight Recorder UI Plug-in
 Bundle-SymbolicName: org.openjdk.jmc.flightrecorder.ui;singleton:=true
-Bundle-Version: 9.1.0.qualifier
+Bundle-Version: 10.0.0.qualifier
 Bundle-Vendor: Oracle Corporation
 Bundle-Localization: plugin
 Require-Bundle: org.openjdk.jmc.rjmx,
@@ -18,6 +18,7 @@ Require-Bundle: org.openjdk.jmc.rjmx,
  org.openjdk.jmc.flightrecorder.configuration,
  org.openjdk.jmc.commands,
  org.openjdk.jmc.browser,
+ org.openjdk.jmc.ui.websocket,
  org.hdrhistogram.HdrHistogram,
  org.eclipse.jetty.io,
  org.eclipse.jetty.websocket.server,
@@ -27,8 +28,8 @@ Require-Bundle: org.openjdk.jmc.rjmx,
  org.eclipse.jetty.ee9.websocket.servlet,
  org.eclipse.jetty.ee9.server,
  org.eclipse.jetty.server,
- org.eclipse.jetty.ee9.websocket.server;bundle-version="12.0.6",
- org.eclipse.jetty.servlet-api;bundle-version="5.0.2"
+ org.eclipse.jetty.ee9.websocket.server,
+ org.eclipse.jetty.servlet-api
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.openjdk.jmc.flightrecorder.ui.FlightRecorderUI
 Export-Package: org.openjdk.jmc.flightrecorder.ui,

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2020, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -730,7 +730,9 @@ public class MCTable extends MCJemmyBase {
 				int startIndex = control.getProperty(Integer.class, Selectable.STATE_PROP_NAME);
 				if (startIndex == -1) {
 					control.keyboard().pushKey(KeyboardButtons.DOWN);
+					sleep(BETWEEN_KEYSTROKES_SLEEP);
 					control.keyboard().pushKey(KeyboardButtons.UP);
+					sleep(BETWEEN_KEYSTROKES_SLEEP);
 					startIndex = control.getProperty(Integer.class, Selectable.STATE_PROP_NAME);
 				}
 				if (startIndex != -1) {
@@ -738,10 +740,12 @@ public class MCTable extends MCJemmyBase {
 					KeyboardButtons stepButton = (index > startIndex) ? KeyboardButtons.DOWN : KeyboardButtons.UP;
 					for (int i = 0; i < Math.abs(steps); i++) {
 						control.keyboard().pushKey(stepButton);
+						sleep(BETWEEN_KEYSTROKES_SLEEP);
 					}
 					// if we have a column > 0 do some side stepping
 					for (int i = 0; i < columnIndex; i++) {
 						control.keyboard().pushKey(KeyboardButtons.RIGHT);
+						sleep(BETWEEN_KEYSTROKES_SLEEP);
 					}
 				}
 			}
@@ -777,6 +781,7 @@ public class MCTable extends MCJemmyBase {
 		for (int i = 0; i < end; i++) {
 			getShell().keyboard().pushKey(KeyboardButtons.DOWN,
 					new KeyboardModifiers[] {KeyboardModifiers.SHIFT_DOWN_MASK});
+			sleep(BETWEEN_KEYSTROKES_SLEEP);
 		}
 	}
 

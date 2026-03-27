@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2020 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -94,12 +94,13 @@ abstract class ChartAndTableUI implements IPageUI {
 	protected FilterComponent tableFilterComponent;
 	protected ItemHistogram table;
 	protected SashForm sash;
-	private IPageContainer pageContainer;
+	protected IPageContainer pageContainer;
 	protected List<IAction> allChartSeriesActions;
 	private IItemCollection selectionItems;
 	private IRange<IQuantity> timeRange;
 	protected XYChart chart;
 	protected FlavorSelector flavorSelector;
+	protected IAttribute<?> classifier;
 
 	ChartAndTableUI(IItemFilter pageFilter, StreamModel model, Composite parent, FormToolkit toolkit,
 			IPageContainer pageContainer, IState state, String sectionTitle, IItemFilter tableFilter, Image icon,
@@ -115,6 +116,7 @@ abstract class ChartAndTableUI implements IPageUI {
 		this.pageFilter = pageFilter;
 		this.model = model;
 		this.pageContainer = pageContainer;
+		this.classifier = classifier;
 		form = DataPageToolkit.createForm(parent, toolkit, sectionTitle, icon);
 		sash = new SashForm(form.getBody(), SWT.VERTICAL);
 		toolkit.adapt(sash);
@@ -122,9 +124,10 @@ abstract class ChartAndTableUI implements IPageUI {
 		table = buildHistogram(sash, state.getChild(TABLE), classifier);
 		MCContextMenuManager mm = MCContextMenuManager.create(table.getManager().getViewer().getControl());
 		ColumnMenusFactory.addDefaultMenus(table.getManager(), mm);
-		table.getManager().getViewer().addSelectionChangedListener(e -> buildChart());
-		table.getManager().getViewer()
-				.addSelectionChangedListener(e -> pageContainer.showSelection(table.getSelection().getItems()));
+		table.getManager().getViewer().addSelectionChangedListener(e -> {
+			buildChart();
+			handleTableSelection();
+		});
 		SelectionStoreActionToolkit.addSelectionStoreActions(pageContainer.getSelectionStore(), table,
 				NLS.bind(Messages.ChartAndTableUI_HISTOGRAM_SELECTION, sectionTitle), mm);
 		tableFilterComponent = FilterComponent.createFilterComponent(table.getManager().getViewer().getControl(),
@@ -213,6 +216,10 @@ abstract class ChartAndTableUI implements IPageUI {
 			table.getManager().getViewer().setSelection(null);
 		}
 		chart.setVisibleRange(timeRange.getStart(), timeRange.getEnd());
+	}
+
+	protected void handleTableSelection() {
+		pageContainer.showSelection(table.getSelection().getItems());
 	}
 
 	protected void buildChart() {

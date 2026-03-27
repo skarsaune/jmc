@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.
- * Copyright (c) 2021, Datadog, Inc. All rights reserved.
+ * Copyright (c) 2021, 2025, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, 2025, Datadog, Inc. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -93,10 +93,6 @@ final class Chunk {
 			throw new IllegalArgumentException();
 		}
 
-		if (value == null && builtin != TypesImpl.Builtin.STRING) {
-			// skip the non-string built-in values
-			return;
-		}
 		switch (builtin) {
 		case STRING: {
 			if (value == null) {
@@ -114,35 +110,35 @@ final class Chunk {
 			break;
 		}
 		case BYTE: {
-			writer.writeByte((byte) value);
+			writer.writeByte(value == null ? (byte) 0 : (byte) value);
 			break;
 		}
 		case CHAR: {
-			writer.writeChar((char) value);
+			writer.writeChar(value == null ? (char) 0 : (char) value);
 			break;
 		}
 		case SHORT: {
-			writer.writeShort((short) value);
+			writer.writeShort(value == null ? (short) 0 : (short) value);
 			break;
 		}
 		case INT: {
-			writer.writeInt((int) value);
+			writer.writeInt(value == null ? 0 : (int) value);
 			break;
 		}
 		case LONG: {
-			writer.writeLong((long) value);
+			writer.writeLong(value == null ? 0L : (long) value);
 			break;
 		}
 		case FLOAT: {
-			writer.writeFloat((float) value);
+			writer.writeFloat(value == null ? 0.0f : (float) value);
 			break;
 		}
 		case DOUBLE: {
-			writer.writeDouble((double) value);
+			writer.writeDouble(value == null ? 0.0 : (double) value);
 			break;
 		}
 		case BOOLEAN: {
-			writer.writeBoolean((boolean) value);
+			writer.writeBoolean(value != null && (boolean) value);
 			break;
 		}
 		default: {

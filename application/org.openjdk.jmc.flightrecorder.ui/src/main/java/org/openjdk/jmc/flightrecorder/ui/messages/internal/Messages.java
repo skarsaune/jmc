@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -240,6 +240,11 @@ public class Messages extends NLS {
 	public static String GarbageCollectionsPage_PAGE_NAME;
 	public static String GarbageCollectionsPage_PAUSE_PHASES_TITLE;
 	public static String GarbageCollectionsPage_PAUSE_PHASE_SELECTION;
+	public static String GarbageCollectionsPage_TENURING_DISTRIBUTION_TITLE;
+	public static String GarbageCollectionsPage_TENURING_DISTRIBUTION_NO_EVENTS_MESSAGE;
+	public static String GarbageCollectionsPage_TENURING_DISTRIBUTION_NO_SELECTION_MESSAGE;
+	public static String GarbageCollectionsPage_TENURING_DISTRIBUTION_MULTI_SELECTION_MESSAGE;
+	public static String GarbageCollectionsPage_TENURING_SIZE;
 	public static String GarbageCollectionsPage_ROW_HEAP;
 	public static String GarbageCollectionsPage_ROW_HEAP_DESC;
 	public static String GarbageCollectionsPage_ROW_HEAP_POST_GC;
@@ -253,6 +258,13 @@ public class Messages extends NLS {
 	public static String GarbageCollectionsPage_USED_HEAP_BEFORE_GC;
 	public static String GarbageCollectionsPage_USED_HEAP_DELTA;
 	public static String GarbageCollectionsPage_USED_METASPACE_DELTA;
+	public static String HDRHistogramView_NO_VALID_SELECTION_TEXT;
+	public static String HDRHistogramView_DURATION_COLUMN_NAME;
+	public static String HDRHistogramView_EVENT_COUNT_COLUMN_NAME;
+	public static String HDRHistogramView_PERCENTILE_SELECTION;
+	public static String HDRHistogramView_DURATION_SELECTION;
+	public static String HDRHistogramView_DURATIONS_CHART_TITLE;
+	public static String HDRHistogramView_DURATIONS_CHART_DESCRIPTION;
 	public static String HeapPage_LIVE_SIZE_OF_CLASS;
 	public static String HeapPage_OVERLAY_GC;
 	public static String HeapPage_OVERLAY_GC_DESC;
@@ -362,6 +374,8 @@ public class Messages extends NLS {
 	public static String JavaApplicationPage_ROW_HEAP_USAGE;
 	public static String JavaApplicationPage_ROW_RSS;
 	public static String JavaApplicationPage_ROW_RSS_DESC;
+	public static String JavaApplicationPage_ROW_THREAD_COUNTS;
+	public static String JavaApplicationPage_ROW_THREAD_COUNTS_DESC;
 	public static String JavaApplicationPage_SELECTED_THREAD;
 	public static String JavaApplicationPage_SELECTED_THREADS;
 	public static String JavaApplicationPage_THREAD_ACTIVITY_ACTION;
@@ -460,9 +474,7 @@ public class Messages extends NLS {
 	public static String PREFERENCES_REMOVE_FINISHED_RECORDING_TEXT;
 	public static String PREFERENCES_RULES_CONFIGURE_SELECTED;
 	public static String PREFERENCES_SHOW_MONITORING_WARNING_TEXT;
-	public static String PREFERENCES_WEBSOCKET_SERVER_PORT_INVALID;
-	public static String PREFERENCES_WEBSOCKET_SERVER_PORT_TEXT;
-	public static String PREFERENCES_WEBSOCKET_SERVER_PORT_TOOLTIP;
+	public static String PREFERENCES_STACKTRACE_SHOW_HIDDEN_FRAMES;
 	public static String ProcessesPage_AGGR_CONCURRENT_PROCESSES;
 	public static String ProcessesPage_AGGR_CONCURRENT_PROCESSES_DESC;
 	public static String ProcessesPage_AGGR_FIRST_SAMPLE;
@@ -577,6 +589,7 @@ public class Messages extends NLS {
 	public static String SystemPage_SECTION_CPU;
 	public static String SystemPage_SECTION_MEMORY;
 	public static String SystemPage_SECTION_OS;
+	public static String SystemPage_SECTION_VIRTUALIZATION;
 	public static String SystemPropertiesPage_PAGE_NAME;
 	public static String TABLECOMPONENT_COMBINE_GROUP_BY;
 	public static String TABLECOMPONENT_GROUP_BY;
@@ -621,6 +634,7 @@ public class Messages extends NLS {
 	public static String VMOperationPage_PAGE_NAME;
 	public static String VMOperationPage_ROW_VM_OPERATIONS;
 	public static String VMOperationPage_TIMELINE_SELECTION;
+	public static String ThreadsPage_LANE_THREAD_ID_TOOLTIP;
 
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

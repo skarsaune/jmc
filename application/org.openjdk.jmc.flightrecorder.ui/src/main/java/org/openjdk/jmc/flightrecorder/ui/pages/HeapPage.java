@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025 Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -215,9 +215,12 @@ public class HeapPage extends AbstractDataPage {
 			XYDataRenderer heapRenderer = new XYDataRenderer(UnitLookup.MEMORY.getDefaultUnit().quantity(0),
 					Messages.HeapPage_ROW_MEMORY_USAGE, Messages.HeapPage_ROW_MEMORY_USAGE_DESC);
 
+			Optional<IItemCollection> optionalHeapSummaryItems = getMemoryEvents(allItems, HEAP_SUMMARY, heapRenderer);
+			Optional<IItemCollection> optionalRssItems = getRssEvents(allItems, heapRenderer);
+			Optional<IItemCollection> optionalOsMemorySummaryItems = getMemoryEvents(allItems, OS_MEMORY_SUMMARY,
+					heapRenderer);
 			Supplier<Stream<IItemCollection>> memoryEventsSupplier = () -> Stream
-					.of(getMemoryEvents(allItems, HEAP_SUMMARY, heapRenderer), getRssEvents(allItems, heapRenderer),
-							getMemoryEvents(allItems, OS_MEMORY_SUMMARY, heapRenderer))
+					.of(optionalHeapSummaryItems, optionalRssItems, optionalOsMemorySummaryItems)
 					.filter(Optional::isPresent).map(Optional::get);
 
 			IItemCollection mergedEvents = ItemCollectionToolkit.merge(memoryEventsSupplier);

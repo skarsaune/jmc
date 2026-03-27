@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -63,6 +63,7 @@ import org.openjdk.jmc.flightrecorder.ui.StreamModel;
 import org.openjdk.jmc.flightrecorder.ui.common.AbstractDataPage;
 import org.openjdk.jmc.flightrecorder.ui.common.DataPageToolkit;
 import org.openjdk.jmc.flightrecorder.ui.common.LabeledPageFactory;
+import org.openjdk.jmc.flightrecorder.ui.common.TreeExpandCollapseSupport;
 import org.openjdk.jmc.flightrecorder.ui.common.TypeLabelProvider;
 import org.openjdk.jmc.ui.TypeAppearance;
 import org.openjdk.jmc.ui.column.ColumnBuilder;
@@ -179,7 +180,7 @@ public class MetadataPage extends AbstractDataPage {
 			MCContextMenuManager mm = MCContextMenuManager.create(viewer.getControl());
 			ColumnMenusFactory.addDefaultMenus(attributeTable, mm);
 			ColumnViewerToolTipSupport.enableFor(viewer);
-
+			TreeExpandCollapseSupport.installFor(viewer);
 			viewer.setContentProvider(new MetadataContentProvider());
 			ColumnViewerToolTipSupport.enableFor(viewer);
 			Text tableFilter = ColumnsFilter.addFilterControl(formBody, toolkit, attributeTable);

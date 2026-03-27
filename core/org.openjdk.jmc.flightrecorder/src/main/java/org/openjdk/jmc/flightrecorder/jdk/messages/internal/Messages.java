@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -108,6 +108,7 @@ public class Messages {
 	public static final String AGGR_JFR_DATA_LOST_COUNT = "AGGR_JFR_DATA_LOST_COUNT"; //$NON-NLS-1$
 	public static final String AGGR_JFR_DATA_LOST_COUNT_DESC = "AGGR_JFR_DATA_LOST_COUNT_DESC"; //$NON-NLS-1$
 	public static final String AGGR_LARGEST_MAX_HEAP_SIZE_FROM_FLAG = "AGGR_LARGEST_MAX_HEAP_SIZE_FROM_FLAG"; //$NON-NLS-1$
+	public static final String AGGR_LARGEST_MAX_METASPACE_SIZE_FROM_FLAG = "AGGR_LARGEST_MAX_METASPACE_SIZE_FROM_FLAG"; //$NON-NLS-1$
 	public static final String AGGR_LAST_ATTRIBUTE = "AGGR_LAST_ATTRIBUTE"; //$NON-NLS-1$
 	public static final String AGGR_LAST_ATTRIBUTE_DESC = "AGGR_LAST_ATTRIBUTE_DESC"; //$NON-NLS-1$
 	public static final String AGGR_LONGEST_GC_PAUSE = "AGGR_LONGEST_GC_PAUSE"; //$NON-NLS-1$
@@ -137,7 +138,11 @@ public class Messages {
 	public static final String AGGR_OLD_COLLECTION_GC_COUNT = "AGGR_OLD_COLLECTION_GC_COUNT"; //$NON-NLS-1$
 	public static final String AGGR_OLD_COLLECTION_GC_COUNT_DESC = "AGGR_OLD_COLLECTION_GC_COUNT_DESC"; //$NON-NLS-1$
 	public static final String AGGR_ALL_COLLECTION_GC_COUNT = "AGGR_ALL_COLLECTION_GC_COUNT"; //$NON-NLS-1$
-	public static final String AGGR_ALL_COLLECTION_GC_COUNT_DESC = "AGGR_ALL_COLLECTION_GC_COUNT_DESC"; //$NON-NLS-1$	
+	public static final String AGGR_ALL_COLLECTION_GC_COUNT_DESC = "AGGR_ALL_COLLECTION_GC_COUNT_DESC"; //$NON-NLS-1$
+	public static final String AGGR_ZGC_ALLOCATION_STALL_COUNT = "AGGR_ZGC_ALLOCATION_STALL_COUNT"; //$NON-NLS-1$
+	public static final String AGGR_ZGC_ALLOCATION_STALL_COUNT_DESC = "AGGR_ZGC_ALLOCATION_STALL_COUNT_DESC"; //$NON-NLS-1$
+	public static final String AGGR_TENURING_AGE_SIZE = "AGGR_TENURING_AGE_SIZE"; //$NON-NLS-1$
+	public static final String AGGR_TENURING_AGE_SIZE_DESC = "AGGR_TENURING_AGE_SIZE_DESC"; //$NON-NLS-1$
 	public static final String AGGR_MAX_BLOCKED_TIME = "AGGR_MAX_BLOCKED_TIME"; //$NON-NLS-1$
 	public static final String AGGR_MAX_BLOCKED_TIME_DESC = "AGGR_MAX_BLOCKED_TIME_DESC"; //$NON-NLS-1$
 	public static final String AGGR_MAX_IO_TIME = "AGGR_MAX_IO_TIME"; //$NON-NLS-1$
@@ -268,6 +273,7 @@ public class Messages {
 	public static final String ATTR_CPU_DESCRIPTION = "ATTR_CPU_DESCRIPTION"; //$NON-NLS-1$
 	public static final String ATTR_CPU_DESCRIPTION_DESC = "ATTR_CPU_DESCRIPTION_DESC"; //$NON-NLS-1$
 	public static final String ATTR_CPU_TYPE = "ATTR_CPU_TYPE"; //$NON-NLS-1$
+	public static final String ATTR_VIRTUALIZATION_NAME = "ATTR_VIRTUALIZATION_NAME"; //$NON-NLS-1$
 	public static final String ATTR_DISABLE_BIASING = "ATTR_DISABLE_BIASING"; //$NON-NLS-1$
 	public static final String ATTR_DUMP_REASON = "ATTR_DUMP_REASON"; //$NON-NLS-1$
 	public static final String ATTR_DUMP_REASON_DESC = "ATTR_DUMP_REASON_DESC"; //$NON-NLS-1$
@@ -528,6 +534,10 @@ public class Messages {
 	public static final String ATTR_TENURING_THRESHOLD_INITIAL_DESC = "ATTR_TENURING_THRESHOLD_INITIAL_DESC"; //$NON-NLS-1$
 	public static final String ATTR_TENURING_THRESHOLD_MAXIMUM = "ATTR_TENURING_THRESHOLD_MAXIMUM"; //$NON-NLS-1$
 	public static final String ATTR_TENURING_THRESHOLD_MAXIMUM_DESC = "ATTR_TENURING_THRESHOLD_MAXIMUM_DESC"; //$NON-NLS-1$
+	public static final String ATTR_TENURING_DISTRIBUTION_SIZE = "ATTR_TENURING_DISTRIBUTION_SIZE"; //$NON-NLS-1$
+	public static final String ATTR_TENURING_DISTRIBUTION_SIZE_DESC = "ATTR_TENURING_DISTRIBUTION_SIZE_DESC"; //$NON-NLS-1$
+	public static final String ATTR_TENURING_DISTRIBUTION_AGE = "ATTR_TENURING_DISTRIBUTION_AGE"; //$NON-NLS-1$
+	public static final String ATTR_TENURING_DISTRIBUTION_AGE_DESC = "ATTR_TENURING_DISTRIBUTION_AGE_DESC"; //$NON-NLS-1$
 	public static final String ATTR_THREAD_DUMP_RESULT = "ATTR_THREAD_DUMP_RESULT"; //$NON-NLS-1$
 	public static final String ATTR_TLAB_MIN_SIZE = "ATTR_TLAB_MIN_SIZE"; //$NON-NLS-1$
 	public static final String ATTR_TLAB_MAX_SIZE = "ATTR_TLAB_MAX_SIZE"; //$NON-NLS-1$
@@ -554,6 +564,14 @@ public class Messages {
 	public static final String ATTR_USER_LOAD_DESC = "ATTR_USER_LOAD_DESC"; //$NON-NLS-1$
 	public static final String ATTR_JAVA_THREAD = "ATTR_JAVA_THREAD"; //$NON-NLS-1$
 	public static final String ATTR_JAVA_THREAD_DESC = "ATTR_JAVA_THREAD_DESC"; //$NON-NLS-1$
+	public static final String ATTR_THREADS_ACCUMULATED_COUNT = "ATTR_THREADS_ACCUMULATED_COUNT";
+	public static final String ATTR_THREADS_ACCUMULATED_COUNT_DESC = "ATTR_THREADS_ACCUMULATED_COUNT_DESC";
+	public static final String ATTR_THREADS_ACTIVE_COUNT = "ATTR_THREADS_ACTIVE_COUNT";
+	public static final String ATTR_THREADS_ACTIVE_COUNT_DESC = "ATTR_THREADS_ACTIVE_COUNT_DESC";
+	public static final String ATTR_THREADS_DAEMON_COUNT = "ATTR_THREADS_DAEMON_COUNT";
+	public static final String ATTR_THREADS_DAEMON_COUNT_DESC = "ATTR_THREADS_DAEMON_COUNT_DESC";
+	public static final String ATTR_THREADS_PEAK_COUNT = "ATTR_THREADS_PEAK_COUNT";
+	public static final String ATTR_THREADS_PEAK_COUNT_DESC = "ATTR_THREADS_PEAK_COUNT_DESC";
 
 	private Messages() {
 	}

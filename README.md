@@ -2,7 +2,7 @@
 
 Mission Control is an open source production time profiling and diagnostics tool for Java.
 
-Builds of Mission Control can currently be found in the Oracle JDK on supported platforms and in the Eclipse marketplace. 
+Builds of Mission Control can currently be found in the Oracle JDK on supported platforms and in the Eclipse Marketplace.
 
 For more information on Mission Control, see https://www.oracle.com/missioncontrol.
 
@@ -215,7 +215,9 @@ Prerequisites for building Mission Control:
 
 1. Install a JDK 17 distribution and make sure it is declared in the local maven toolchain `~/.m2/toolchains.xml`
 
-2. Install Maven (version 3.5.x. or above)
+2. Install a JDK 21 distribution and make sure that it too is declared in the local maven toolchain.
+
+3. Install Maven (version 3.5.x or above)
 
 On Linux or macOS you can use the `build.sh` script to build JMC:
 ```
@@ -227,13 +229,28 @@ usage: call ./build.sh with the following options:
    --clean       to run maven clean
 ```
 
-Otherwise follow the steps manually:
+Otherwise follow the steps manually.
 
-First get third party dependencies into a local _p2_ repo and make it available on localhost:
+## Building JMC Step-by-Step
+
+Here are the individual steps:
+
+1. Get the third-party dependencies into a local _p2_ repo and make it available on localhost. 
+
+2. Build and install the core libraries.
+
+3. Build the JMC application.
+
+First, if on Mac / Linux:
 
 ```bash
-cd missioncontrol-folder # where you just cloned the sources
 mvn p2:site --file releng/third-party/pom.xml; mvn jetty:run --file releng/third-party/pom.xml
+```
+
+Or, if on Windows:
+
+```bash
+mvn p2:site --file releng\third-party\pom.xml && mvn jetty:run --file releng\third-party\pom.xml
 ```
 
 Then in another terminal (in the project root):
@@ -251,7 +268,7 @@ If maven reports a toolchain error, e.g. :
 [ERROR] Please make sure you define the required toolchains in your ~/.m2/toolchains.xml file.
 ```
 
-Create or amend the local maven toolchain file by pointing to the right/any JDK 17.
+Create or amend the local maven toolchain file by pointing to any JDK 17 installation.
 
 <details><summary><code>~/.m2/toolchains.xml</code></summary>
 
@@ -329,7 +346,7 @@ mvn verify -P uitests -Dspotbugs.skip=true
 ```
 
 ## Filtering Test Runs
-Aside from the from the simple -test Maven flag test classes that should be run/not run can be specified by means of the system properties "test.includes" and/or "test.excludes". Multiple patterns can be specified by comma separation.
+Aside from the simple -test Maven flag, test classes that should be run/not run can be specified by means of the system properties "test.includes" and/or "test.excludes". Multiple patterns can be specified by comma separation.
 
 For example:
 
@@ -366,11 +383,12 @@ to use when launching, add `-vm` and the path to a directory where a JDK java la
 Here is an example for Mac OS X:
 
 ```bash
-# on Intel
+# on aarch64 (M1/M2/M3/M4)
+target/products/org.openjdk.jmc/macosx/cocoa/aarch64/JDK\ Mission\ Control.app/Contents/MacOS/jmc
+
+# on x86_64 (Intel)
 target/products/org.openjdk.jmc/macosx/cocoa/x86_64/JDK\ Mission\ Control.app/Contents/MacOS/jmc
 
-# on M1/M2
-target/products/org.openjdk.jmc/macosx/cocoa/aarch64/JDK\ Mission\ Control.app/Contents/MacOS/jmc
 ```
 
 Here is an example for Linux:
@@ -404,10 +422,10 @@ There is another update site for the Eclipse plug-ins, providing plug-ins for ru
 application/org.openjdk.jmc.updatesite.ide/target/
 ```
 
-To install it into Eclipe, simply open Eclipse and select Help | Install New Software... In the dialog, click Add... and then click the Archive... button. Select the built update site, e.g. 
+To install it into Eclipse, simply open Eclipse and select Help | Install New Software... In the dialog, click Add... and then click the Archive... button. Select the built update site, e.g. 
 
 ```bash
-application/org.openjdk.jmc.updatesite.ide/target/org.openjdk.jmc.updatesite.ide-9.1.0-SNAPSHOT.zip
+application/org.openjdk.jmc.updatesite.ide/target/org.openjdk.jmc.updatesite.ide-10.0.0-SNAPSHOT.zip
 ```
 
 ## Setting up Development Environment

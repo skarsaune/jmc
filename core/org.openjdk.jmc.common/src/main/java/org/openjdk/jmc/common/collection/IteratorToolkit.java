@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2020, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2026, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -33,9 +33,13 @@
 package org.openjdk.jmc.common.collection;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.function.Predicate;
 
 /**
@@ -102,6 +106,41 @@ public class IteratorToolkit {
 					}
 				}
 				return NO_MORE_ELEMENTS;
+			}
+		};
+	}
+
+	/**
+	 * Wrap an iterator in a new iterator that merges values from sorted iterators.
+	 *
+	 * @param <T>
+	 *            input iterator type
+	 * @param iterators
+	 *            input iterators
+	 * @param comparator
+	 *            ordering rule function
+	 * @return a new iterator that contains sorted elements
+	 */
+	public static <T> Iterator<T> mergedSorting(
+		final Collection<? extends Iterator<T>> iterators, final Comparator<T> comparator) {
+		final Queue<PeekingIterator<T>> priorityQueue = new PriorityQueue<>(
+				Comparator.comparing(PeekingIterator::peek, comparator));
+		for (Iterator<T> iterator : iterators) {
+			if (iterator.hasNext()) {
+				priorityQueue.add(new PeekingIterator<>(iterator));
+			}
+		}
+
+		return new AbstractIterator<T>() {
+			@Override
+			protected T findNext() {
+				if (priorityQueue.isEmpty())
+					return NO_MORE_ELEMENTS;
+				PeekingIterator<T> minPeekingIterator = priorityQueue.poll();
+				T result = minPeekingIterator.next();
+				if (minPeekingIterator.hasNext())
+					priorityQueue.add(minPeekingIterator);
+				return result;
 			}
 		};
 	}

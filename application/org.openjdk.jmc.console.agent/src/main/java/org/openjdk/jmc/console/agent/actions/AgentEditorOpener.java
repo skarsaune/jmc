@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020, 2023 Oracle and/or its affiliates. All rights reserved.
- * Copyright (c) 2020, 2023 Red Hat Inc. All rights reserved.
+ * Copyright (c) 2020, 2025, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2020, 2025, Red Hat Inc. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -41,7 +41,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -52,7 +51,6 @@ import org.eclipse.ui.PlatformUI;
 import org.openjdk.jmc.common.action.Executable;
 import org.openjdk.jmc.common.io.IOToolkit;
 import org.openjdk.jmc.console.agent.AgentJmxHelper;
-import org.openjdk.jmc.console.agent.AgentPlugin;
 import org.openjdk.jmc.console.agent.editor.AgentEditor;
 import org.openjdk.jmc.console.agent.editor.AgentEditorInput;
 import org.openjdk.jmc.console.agent.messages.internal.Messages;
@@ -97,13 +95,12 @@ public class AgentEditorOpener implements IActionFactory {
 				helper.removeConnectionChangedListener(this);
 				return ret;
 			} catch (ConnectionException e) {
-				IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-				DialogToolkit.showException(window.getShell(), Messages.AgentEditorOpener_MESSAGE_COULD_NOT_CONNECT, e);
-
-				return new Status(IStatus.ERROR, AgentPlugin.PLUGIN_ID, IStatus.ERROR,
-						NLS.bind(Messages.AgentEditorOpener_MESSAGE_COULD_NOT_CONNECT,
-								serverHandle.getServerDescriptor().getDisplayName(), e.getMessage()),
-						e);
+				DisplayToolkit.safeAsyncExec(Display.getDefault(), () -> {
+					IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+					DialogToolkit.showException(window.getShell(), Messages.AgentEditorOpener_MESSAGE_COULD_NOT_CONNECT,
+							e);
+				});
+				return Status.CANCEL_STATUS;
 			}
 		}
 

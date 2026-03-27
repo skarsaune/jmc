@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2025, Oracle and/or its affiliates. All rights reserved.
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The contents of this file are subject to the terms of either the Universal Permissive License
- * v 1.0 as shown at http://oss.oracle.com/licenses/upl
+ * v 1.0 as shown at https://oss.oracle.com/licenses/upl
  *
  * or the following license:
  *
@@ -482,8 +482,8 @@ public final class JdkAttributes {
 			Messages.getString(Messages.ATTR_JVM_START_TIME), TIMESTAMP);
 	public static final IAttribute<String> JVM_NAME = attr("jvmName", Messages.getString(Messages.ATTR_JVM_NAME), //$NON-NLS-1$
 			PLAIN_TEXT);
-	public static final IAttribute<IQuantity> JVM_PID = attr("pid", Messages.getString(Messages.ATTR_JVM_PID), //$NON-NLS-1$
-			NUMBER);
+	public static final IAttribute<Number> JVM_PID = attr("pid", Messages.getString(Messages.ATTR_JVM_PID), //$NON-NLS-1$
+			RAW_NUMBER);
 	public static final IAttribute<String> JVM_VERSION = attr("jvmVersion", //$NON-NLS-1$
 			Messages.getString(Messages.ATTR_JVM_VERSION), PLAIN_TEXT);
 	public static final IAttribute<String> JVM_ARGUMENTS = attr("jvmArguments", //$NON-NLS-1$
@@ -687,6 +687,12 @@ public final class JdkAttributes {
 	public static final IAttribute<IQuantity> TENURING_THRESHOLD_MAXIMUM = attr("maxTenuringThreshold", //$NON-NLS-1$
 			Messages.getString(Messages.ATTR_TENURING_THRESHOLD_MAXIMUM),
 			Messages.getString(Messages.ATTR_TENURING_THRESHOLD_MAXIMUM_DESC), NUMBER);
+	public static final IAttribute<IQuantity> TENURING_DISTRIBUTION_SIZE = attr("size", //$NON-NLS-1$
+			Messages.getString(Messages.ATTR_TENURING_DISTRIBUTION_SIZE),
+			Messages.getString(Messages.ATTR_TENURING_DISTRIBUTION_SIZE_DESC), MEMORY);
+	public static final IAttribute<IQuantity> TENURING_DISTRIBUTION_AGE = attr("age", //$NON-NLS-1$
+			Messages.getString(Messages.ATTR_TENURING_DISTRIBUTION_AGE),
+			Messages.getString(Messages.ATTR_TENURING_DISTRIBUTION_AGE_DESC), NUMBER);
 	public static final IAttribute<Boolean> USES_TLABS = attr("usesTLABs", Messages.getString(Messages.ATTR_USES_TLABS), //$NON-NLS-1$
 			Messages.getString(Messages.ATTR_USES_TLABS_DESC), FLAG);
 	public static final IAttribute<IQuantity> TLAB_MIN_SIZE = attr("minTLABSize", //$NON-NLS-1$
@@ -817,6 +823,32 @@ public final class JdkAttributes {
 			return postJDK9Accessor == null ? preJDK9Accessor : postJDK9Accessor;
 		}
 	});
+
+	public static final IAttribute<Number> THREADS_ACCUMULATED_COUNT_NUMBER = Attribute.attr("accumulatedCount", //$NON-NLS-1$
+			Messages.getString(Messages.ATTR_THREADS_ACCUMULATED_COUNT),
+			Messages.getString(Messages.ATTR_THREADS_ACCUMULATED_COUNT_DESC), RAW_NUMBER);
+	public static final IAttribute<Number> THREADS_ACTIVE_COUNT_NUMBER = Attribute.attr("activeCount", //$NON-NLS-1$
+			Messages.getString(Messages.ATTR_THREADS_ACTIVE_COUNT),
+			Messages.getString(Messages.ATTR_THREADS_ACTIVE_COUNT_DESC), RAW_NUMBER);
+	public static final IAttribute<Number> THREADS_DAEMON_COUNT_NUMBER = Attribute.attr("daemonCount", //$NON-NLS-1$
+			Messages.getString(Messages.ATTR_THREADS_DAEMON_COUNT),
+			Messages.getString(Messages.ATTR_THREADS_DAEMON_COUNT_DESC), RAW_NUMBER);
+	public static final IAttribute<Number> THREADS_PEAK_COUNT_NUMBER = Attribute.attr("peakCount", //$NON-NLS-1$
+			Messages.getString(Messages.ATTR_THREADS_PEAK_COUNT),
+			Messages.getString(Messages.ATTR_THREADS_PEAK_COUNT_DESC), RAW_NUMBER);
+
+	public static final IAttribute<IQuantity> THREADS_ACCUMULATED_COUNT = convertNumberToQuantity("accumulatedCount", //$NON-NLS-1$
+			Messages.getString(Messages.ATTR_THREADS_ACCUMULATED_COUNT),
+			Messages.getString(Messages.ATTR_THREADS_ACCUMULATED_COUNT_DESC), THREADS_ACCUMULATED_COUNT_NUMBER);
+	public static final IAttribute<IQuantity> THREADS_ACTIVE_COUNT = convertNumberToQuantity("activeCount", //$NON-NLS-1$
+			Messages.getString(Messages.ATTR_THREADS_ACTIVE_COUNT),
+			Messages.getString(Messages.ATTR_THREADS_ACTIVE_COUNT_DESC), THREADS_ACTIVE_COUNT_NUMBER);
+	public static final IAttribute<IQuantity> THREADS_DAEMON_COUNT = convertNumberToQuantity("daemonCount", //$NON-NLS-1$
+			Messages.getString(Messages.ATTR_THREADS_DAEMON_COUNT),
+			Messages.getString(Messages.ATTR_THREADS_DAEMON_COUNT_DESC), THREADS_DAEMON_COUNT_NUMBER);
+	public static final IAttribute<IQuantity> THREADS_PEAK_COUNT = convertNumberToQuantity("peakCount", //$NON-NLS-1$
+			Messages.getString(Messages.ATTR_THREADS_PEAK_COUNT),
+			Messages.getString(Messages.ATTR_THREADS_PEAK_COUNT_DESC), THREADS_PEAK_COUNT_NUMBER);
 
 	public static final IAttribute<String> INFLATION_REASON = attr("cause", //$NON-NLS-1$
 			Messages.getString(Messages.ATTR_INFLATION_REASON), Messages.getString(Messages.ATTR_INFLATION_REASON_DESC),
@@ -1320,6 +1352,8 @@ public final class JdkAttributes {
 			PLAIN_TEXT);
 	public static final IAttribute<String> CPU_TYPE = attr("cpu", Messages.getString(Messages.ATTR_CPU_TYPE), //$NON-NLS-1$
 			PLAIN_TEXT);
+	public static final IAttribute<String> VIRTUALIZATION_NAME = attr("name", //$NON-NLS-1$
+			Messages.getString(Messages.ATTR_VIRTUALIZATION_NAME), PLAIN_TEXT);
 	public static final IAttribute<IQuantity> NUMBER_OF_CORES = attr("cores", //$NON-NLS-1$
 			Messages.getString(Messages.ATTR_NUMBER_OF_CORES), Messages.getString(Messages.ATTR_NUMBER_OF_CORES_DESC),
 			NUMBER);
