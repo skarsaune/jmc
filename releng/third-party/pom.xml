@@ -191,7 +191,7 @@
 									<transitive>false</transitive>
 									<instructions>
 							            <Bundle-SymbolicName>org.jolokia.client.kubernetes</Bundle-SymbolicName>
-							            <Bundle-Description>Jolokia JMX adapter</Bundle-Description>
+							            <Bundle-Description>Jolokia Kubernetes adapter</Bundle-Description>
 							            <Import-Package>
 							              <!-- jolokia-json -->
 							              org.jolokia.json;version="${jolokia.version}",
@@ -201,21 +201,21 @@
 							              org.jolokia.client;version="${jolokia.version}",
 							              org.jolokia.client.spi;version="${jolokia.version}",
 							              <!-- jolokia-client-java-httpclient4 -->
-							              org.jolokia.client.httpclient4;version="${jolokia.version}",
+							              org.jolokia.client.httpclient4;version="${jolokia.version},
 							              <!-- jolokia-client-jmx-adapter -->
 							              org.jolokia.client.jmxadapter;version="${jolokia.version}",
 							              <!-- jolokia-server-core -->
 							              org.jolokia.server.core.util;version="${jolokia.version}",
 							              <!-- httpcore -->
-							              org.apache.http;version="[4.4,5)",
-							              org.apache.http.entity;version="[4.4,5)",
-							              org.apache.http.message;version="[4.4,5)",
-							              org.apache.http.params;version="[4.4,5)",
-							              org.apache.http.protocol;version="[4.4,5)",
+							              org.apache.http,
+							              org.apache.http.entity,
+							              org.apache.http.message,
+							              org.apache.http.params,
+							              org.apache.http.protocol,
 							              <!-- httpclient -->
-							              org.apache.http.client;version="[4.5,5)",
-							              org.apache.http.client.methods;version="[4.5,5)",
-							              org.apache.http.conn;version="[4.5,5)"
+							              org.apache.http.client,
+							              org.apache.http.client.methods,
+							              org.apache.http.conn
 							            </Import-Package>
 							            <Export-Package>
 							              org.jolokia.kubernetes.client
@@ -224,6 +224,16 @@
 								</artifact>
 								<artifact>
 									<id>org.jolokia:jolokia-client-java-httpclient4:${jolokia.version}</id>
+									  <override>true</override>
+  										<instructions>
+  											<Bundle-Name>Jolokia HTTP4 Client</Bundle-Name>
+											<Bundle-SymbolicName>org.jolokia.client.httpclient4</Bundle-SymbolicName>
+    										<Import-Package>
+      											org.slf4j;version="[1.7,3)",
+      											*
+    										</Import-Package>
+    										<Export-Package>org.jolokia.client.httpclient4</Export-Package>
+  										</instructions>
 								</artifact>
 								<artifact>
 									<id>org.awaitility:awaitility:4.0.0</id>
